@@ -68,7 +68,11 @@ function buildDockerImage (tarPath){
 
 	// })
 
-	var child = exec('cd server/app/modules/temp/dockertest; docker build .');
+	var child = exec('cd server/app/modules/temp/dockertest; docker build -t nodetest .; docker run nodetest',function(error,stdout,stderr){
+		console.log("error : ", error);
+		console.log("stdout : ", stdout);
+		console.log("stderr : ", stderr);  
+	});
 }
 
 
