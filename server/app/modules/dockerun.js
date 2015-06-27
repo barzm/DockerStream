@@ -8,6 +8,7 @@ var axios = require('axios');
 var request = require('request');
 var Promise = require('bluebird');
 var tartar = require('tar.gz');
+var exec = require('child_process').exec;
 
 
 Promise.promisifyAll(fs);
@@ -21,27 +22,28 @@ function downloadRepo() {
 	
 	var file = fs.createWriteStream(__dirname + '/temp/repo.tar.gz')
 
-	var options = {
-		url: 'https://api.github.com/repos/mbarzizza/DockerTest/tarball',
-		headers: {
-			'User-Agent': 'request'
-		}
-	}
-	request.get(options,function (err, response, body){
-		console.log("RESPONSE",response)
-		//file.write(response.data)
+	// var options = {
+	// 	url: 'https://api.github.com/repos/mbarzizza/DockerTest/tarball',
+	// 	headers: {
+	// 		'User-Agent': 'request'
+	// 	}
+	// }
+	// request.get(options,function (err, response, body){
+	// 	console.log("RESPONSE",response)
+	// 	//file.write(response.data)
 
-	})
-	.on('data',function (data){
-		console.log("writing chunk")
-		file.write(data)
-	})
-	.on('end',function (){
-		console.log("ending write file")
-		file.end()
-		buildDockerImage()
-		return file
-	})
+	// })
+	// .on('data',function (data){
+	// 	console.log("writing chunk")
+	// 	file.write(data)
+	// })
+	// .on('end',function (){
+	// 	console.log("ending write file")
+	// 	file.end()
+	// 	buildDockerImage()
+	// 	return file
+	// })
+	buildDockerImage()
 
 }
 
@@ -49,16 +51,18 @@ function downloadRepo() {
 function buildDockerImage (tarPath){
 	var docker = new Docker({
 		socketPath: '/var/run/docker.sock',
-		host: '192.168.1.123'
-		// port: process.env.DOCKER_PORT || 2375
+		host: '192.168.59.106',
+		port: process.env.DOCKER_PORT || 2376
 	}); 
 	console.log(docker);
-	docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function(err,response){
+	docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function (err,response){
 		console.log('error ', err);
 		console.log('================');
 		console.log('response ',response);
 
 	})
+
+	var child = exec('docker build ')
 }
 
 
