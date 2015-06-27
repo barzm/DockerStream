@@ -8,6 +8,7 @@ var axios = require('axios');
 var request = require('request');
 var Promise = require('bluebird');
 var tartar = require('tar.gz');
+var shell = require('shelljs'); 
 var exec = require('child_process').exec;
 
 
@@ -47,22 +48,28 @@ function downloadRepo() {
 
 }
 
+function expandRepo(directory){
+
+
+}
+
 
 function buildDockerImage (tarPath){
-	var docker = new Docker({
-		socketPath: '/var/run/docker.sock',
-		host: '192.168.59.106',
-		port: process.env.DOCKER_PORT || 2376
-	}); 
-	console.log(docker);
-	docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function (err,response){
-		console.log('error ', err);
-		console.log('================');
-		console.log('response ',response);
 
-	})
+	// var docker = new Docker({
+	// 	socketPath: '/var/run/docker.sock',
+	// 	host: '192.168.59.106',
+	// 	port: process.env.DOCKER_PORT || 2376
+	// }); 
+	// console.log(docker);
+	// docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function (err,response){
+	// 	console.log('error ', err);
+	// 	console.log('================');
+	// 	console.log('response ',response);
 
-	var child = exec('docker build ')
+	// })
+
+	var child = exec('cd server/modules/temp/dockertest; docker build .');
 }
 
 
