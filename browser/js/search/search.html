@@ -1,4 +1,17 @@
 <section id="search">
 <input type="text" ng-model='searchInput'>
-<button class='btn btn-primary' ng-click='search()'>Submit</button>
+<button type='button' class='btn btn-primary' ng-click='search()'>Submit</button>
 </section>
+
+<div id='search-results'>
+	<ul id='repo-list' ng-repeat='result in results'>
+		<li id='repo-item'>
+			<h3 class="repo-list-name">
+				<a href='{{ result.html_url }}'>{{ result.full_name }}</a>
+			</h3>
+			<p class="repo-list-description">
+				{{ result.description }}
+			</p>
+		</li>
+	</ul>
+</div>

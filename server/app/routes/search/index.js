@@ -11,7 +11,7 @@ router.get('/:query', function(req, res, next) {
             }
         })
         .then(function(response) {
-            res.json(response);
+            res.json(JSON.parse(response).items.slice(0, 20));
         })
         .catch(next)
 })
