@@ -1,6 +1,6 @@
-FROM node
-ADD app.js /app.js
+FROM ubuntu:14.04
+RUN sudo apt-get update
+RUN sudo apt-get install -y nodejs npm
 COPY . /src
 RUN cd /src
-CMD ["node","app.js"]
-RUN echo 'The docker has finished running'
+CMD ["nodejs","/src/app.js"]
