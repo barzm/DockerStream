@@ -66,12 +66,7 @@ Vagrant.configure(2) do |config|
   # documentation for more information about their specific syntax and use.
    config.vm.provision "shell", inline: <<-SHELL
       sudo apt-get update
-      sudo apt-get install nodejs
-      sudo apt-get install npm
-      sudo apt-get install build-essential
-      sudo export PATH=$PATH:usr/bin/env
       sudo apt-get install git
-      sudo npm install gulp -g
       wget -qO- https://get.docker.com/ | sh
   SHELL
 end
