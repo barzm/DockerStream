@@ -1,0 +1,37 @@
+#search-results {
+	width: 80%;
+	float: left;
+	padding-right: 10px;
+	padding-left: 10px;
+	font-size: 13px;
+	font-family: Helvetica, arial, sans-serif;
+	line-height: 1.4;
+}
+
+#repo-list {
+	position: relative;
+	word-wrap: break-word;
+}
+
+#repo-item {
+	position: relative;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	list-style: none;
+	border-bottom: 1px solid grey;
+	
+	.repo-list-name {
+		margin: 0 0 8px;
+		font-size: 20px;
+		line-height: 1.2;
+	}
+
+	.repo-list-description {
+		max-width: 550px;
+		margin-top: 8px;
+		margin-bottom: 0;
+		font-size: 14px;
+		color: #666;
+
+	}
+}

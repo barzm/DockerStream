@@ -1,4 +1,4 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, $window) {
 
     return {
         restrict: 'E',
@@ -8,15 +8,18 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
 
             scope.items = [
                 { label: 'Home', state: 'home' },
-                { label: 'About', state: 'about' },
-                { label: 'Tutorial', state: 'tutorial' },
-                { label: 'Members Only', state: 'membersOnly', auth: true }
+                { label: 'Search', state: 'search'},
+                { label: 'Pipelines', state: 'pipelines', auth: true}
             ];
 
             scope.user = null;
 
             scope.isLoggedIn = function () {
                 return AuthService.isAuthenticated();
+            };
+
+            scope.gitLogin = function () {
+                AuthService.gitLogin();
             };
 
             scope.logout = function () {

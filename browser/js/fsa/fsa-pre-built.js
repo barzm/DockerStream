@@ -90,6 +90,10 @@
                 });
         };
 
+        this.gitLogin = function () {
+            window.location.href = "http://127.0.0.1:1337/auth/github"
+        }
+
         this.logout = function () {
             return $http.get('/logout').then(function () {
                 Session.destroy();
