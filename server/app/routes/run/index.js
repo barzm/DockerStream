@@ -10,7 +10,7 @@ router.get('/',function(req,res,next){
 
 	// var pipelineId = req.query.id; 
 	// var callbackUrl = req.query.callbackUrl; 
-	run();
+	run.downloadRepo();
 	// exec('cd public/applet; docker build .',function(err,stdout,stderr){
 		// console.log('err', err);
 		// console.log('stdout ',stdout);
