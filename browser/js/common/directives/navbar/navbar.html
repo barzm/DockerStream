@@ -8,9 +8,9 @@
                 <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
             </li>
         </ul>
-        <button ng-show="!user" ui-sref="login" class="btn login-button">Login</button>
+        <button ng-show="!user" class="btn login-button" ng-click="gitLogin()">Github Login</button>
         <div ng-show="user" class="welcome">
-            <span>Welcome, {{ user.email }}!</span>
+            <span>Welcome, {{ user.github.displayName.split(' ')[0] }}.</span>
             <a ng-click="logout()">Logout</a>
         </div>
     </div>
