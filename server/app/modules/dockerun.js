@@ -8,7 +8,6 @@ var axios = require('axios');
 var request = require('request');
 var Promise = require('bluebird');
 var tartar = require('tar.gz');
-var shell = require('shelljs'); 
 var exec = require('child_process').exec;
 
 
@@ -69,7 +68,7 @@ function buildDockerImage (tarPath){
 
 	// })
 
-	var child = exec('cd server/modules/temp/dockertest; docker build .');
+	var child = exec('cd server/app/modules/temp/dockertest; docker build .');
 }
 
 
