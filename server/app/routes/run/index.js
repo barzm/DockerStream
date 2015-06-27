@@ -9,7 +9,7 @@ router.get('/',function(req,res,next){
 	console.log('route hit');
 	// var pipelineId = req.query.id; 
 	// var callbackUrl = req.query.callbackUrl; 
-	// run.downloadRepo();
+	run.downloadRepo();
 	
 	res.send("okay"); 
 

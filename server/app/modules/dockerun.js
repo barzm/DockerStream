@@ -47,22 +47,32 @@ function downloadRepo() {
 
 }
 
+function expandRepo(directory){
+
+
+}
+
 
 function buildDockerImage (tarPath){
-	var docker = new Docker({
-		socketPath: '/var/run/docker.sock',
-		host: '192.168.59.106',
-		port: process.env.DOCKER_PORT || 2376
-	}); 
-	console.log(docker);
-	docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function (err,response){
-		console.log('error ', err);
-		console.log('================');
-		console.log('response ',response);
 
-	})
+	// var docker = new Docker({
+	// 	socketPath: '/var/run/docker.sock',
+	// 	host: '192.168.59.106',
+	// 	port: process.env.DOCKER_PORT || 2376
+	// }); 
+	// console.log(docker);
+	// docker.buildImage(__dirname + '/temp/test.tar',{t:'node'},function (err,response){
+	// 	console.log('error ', err);
+	// 	console.log('================');
+	// 	console.log('response ',response);
 
-	var child = exec('docker build ')
+	// })
+
+	var child = exec('cd server/app/modules/temp/dockertest; docker build -t nodetest .; docker run nodetest',function(error,stdout,stderr){
+		console.log("error : ", error);
+		console.log("stdout : ", stdout);
+		console.log("stderr : ", stderr);  
+	});
 }
 
 
