@@ -1,0 +1,1 @@
+This directory contains all of the github repositories pulled by the pipe creation process. See server/app/lib/piperunner.js.
