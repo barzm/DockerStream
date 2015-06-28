@@ -7,7 +7,7 @@ module.exports = router;
 
 router.get('/',function(req,res,next){
 	console.log('route hit');
-	run();
+	run.run(); //req.user.github.token
 	res.send("okay"); 
 
 })

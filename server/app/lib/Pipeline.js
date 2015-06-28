@@ -1,14 +1,17 @@
 var uuid = require('node-uuid'); 
-var exec = require('child_process').exec;
+
 var Promise = require('bluebird');
+var Pipe = require('./Pipe').Pipe;
+var exec = require('child-process-promise').exec;
 
 class Pipeline {
-	constructor(pipeArray) {
+	constructor(pipeArray,githubToken) {
 		this.pipes = [];
 		this.mongoId;
-		this.uuid=generateId();
+		this.uuid;
 		this.targetDir;
-		buildPipeline(pipeArray);
+		this.pipeArray = pipeArray;
+		// this.buildPipeline(pipeArray);
 	}
 	addPipe(gitUrl) { //add to mongo pipeline
 
@@ -17,30 +20,52 @@ class Pipeline {
 		return this.pipes;
 	}
 	generateId() {
+		var self = this;
 		this.uuid = uuid.v1();
-		this.targetDir = __dirname + '/containers/' + this.uuid;
-		exec('mkdir ' + this.targetDir);
-		exec('mkdir ' + this.targetDir + '/data')
+		this.targetDir = './containers/' + this.uuid;
+		console.log("TARGET",this.targetDir)
+		return exec('mkdir ' + self.targetDir)
+		.then(function(){
+			console.log("MAKING data folder")
+			return exec('mkdir ' + self.targetDir + '/data')
+		})
+		.catch(function(err){
+			console.log("ERROR IN generateId",err.stack)
+		})
+		
 	}
+
 	buildPipeline(){
 		var pipe;
-		var pipeline = pipeArray.sort(function(a,b){
-			if(a.order > b.order) return 1
-			if(a.order < b.order) return -1
-			return 0
+		var self = this;
+		return new Promise(function(resolve,reject){
+			self.generateId()
+			.then(function(){
+				console.log("PIPELINE IN BUILD",self.pipeArray)
+				var pipeline = self.pipeArray.sort(function(a,b){
+					if(a.order > b.order) return 1
+					if(a.order < b.order) return -1
+					return 0
+				})
+				var l = pipeline.length
+				for(var i=0; i<l; i++){
+					self.pipes.push(new Pipe(pipeline[i].gitUrl,self.targetDir)) 
+				}
+
+				resolve()
+			})
 		})
-		var l = pipeline.length
-		for(var i=0; i<l; i++){
-			this.pipes.push(new Pipe(pipeline[i].gitUrl,this.targetDir)) 
-		}
 	}
-	runPipeline(){
+
+	runPipeline(githubToken){
+		console.log("ABOUT TO RUN PIPELINE")
 		var l = this.pipes.length;
 		for(var i=0; i<l; i++){
-			this.pipes[i].runPipe();
+			this.pipes[i].runPipe(githubToken);
 		}
 	}
 }
+
 module.exports={
 	Pipeline:Pipeline
 }
