@@ -1,13 +1,16 @@
 app.factory('Pipeline', function($http) {
 
-	function addToPipeline () {
-		return $http.post('/api/pipeline')
+
+
+
+	function createPipeline (pName) {
+		return $http.post('/api/pipelines', {name: pName})
 		.then(function (response) {
 			return response.data;
 		})
 	}
 
 	return {
-		add: addToPipeline
+		create: createPipeline
 	}
 })
