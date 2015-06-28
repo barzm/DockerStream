@@ -15,3 +15,16 @@ router.get('/:query', function(req, res, next) {
         })
         .catch(next)
 })
+
+router.get('/users/:user', function(req, res, next) {
+    request({
+        url: 'https://api.github.com/users/' + req.params.user + '/repos',
+        headers: {
+            'User-Agent': 'Pied Pipeline'
+        }
+    })
+    .then(function(response) {
+        res.json(JSON.parse(response));
+    })
+    .catch(next)
+})
