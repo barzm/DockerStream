@@ -5,8 +5,8 @@ var fs = require('fs'); //used to access dockerfile
 var request = require('request');
 var Promise = require('bluebird');
 var exec = require('child_process').exec;
-var Pipe = require('./Pipe');
-var Pipeline = require('./Pipeline');
+var Pipe = require('../lib/Pipe');
+var Pipeline = require('../lib/Pipeline');
 
 
 Promise.promisifyAll(fs);
