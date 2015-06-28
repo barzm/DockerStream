@@ -1,6 +1,8 @@
 <section id="search">
-<input type="text" ng-model='searchInput'>
-<button type='button' class='btn btn-primary' ng-click='search()'>Submit</button>
+	<form class='form' ng-submit='search()'></form>
+		<input  type="text" ng-model='input'>
+		<button type='button' ng-click='search()' class='btn btn-primary'>Submit</button>
+	</form>
 </section>
 
 <div id='search-results'>

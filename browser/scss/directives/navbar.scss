@@ -1,8 +1,11 @@
-navbar {
+.navbar {
 
   display: block;
-  background: #a1a1a1;
-
+  background: white;
+  padding: none;
+  margin: none;
+  margin-bottom: 0px;
+  border-bottom: 1px solid $darkBlue;
   fullstack-logo {
     padding-top: 10px;
     margin-right: 20px;
@@ -10,41 +13,58 @@ navbar {
   }
 
   a {
-    color: white;
+    color: $darkBlue;
     &:hover {
-      color: white;
+      color: $darkBlue;
     }
   }
 
   .nav > li > a {
     cursor: pointer;
     &.active {
-      color: #f30046;
+      color: darken($darkBlue, 10%);
     }
     &:hover {
       transition: color 0.2s;
     }
     &:focus {
-      color: #f30046;
+      color: darken($darkBlue, 20%);
       background: transparent;
     }
   }
 
-  .login-button {
+  #login-button {
     float: right;
     margin-top: 8px;
+    width: 110px;
+    padding-right: 50px;
+    background: transparent;
+    &:hover {
+      color: white;
+      background-color: $blue;
+
+    }
+    border-color: $blue;
+    color: $darkBlue;
   }
 
   .welcome {
     float: right;
     margin-top: 12px;
     span {
-      color: white;
+      color: $darkBlue;
     }
     a {
-      color: #f30046;
+      color: darken($darkBlue, 10%);
       cursor: pointer;
     }
   }
 
+}
+
+.github-login {
+  font-size: 1.5em;
+  position: absolute;
+  top: 14px;
+  right: 11.2%;
 }

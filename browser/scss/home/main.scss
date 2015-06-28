@@ -1,12 +1,102 @@
+#home-div {
+	background-color: $blue;
+	color: white;
+	height: 100vh;
+	width: 100%;
+	padding: 20px;
+	margin: none;
+	img {
+		position: absolute;
+		bottom: 0;
+		right: 48.6%;
+		width: 42px;
+		height: 42px;
+		transform: scale(1, 1);
+		cursor: pointer;
+	}
+	button {
+		margin-top: 15%;
+		position: absolute;
+		right: 42.7%;
+		font-size: 2em;
+		background: transparent;
+		font-weight: lighter;
+		i {
+			font-size: 1em;
+		}
+
+		&:hover {
+			background: darken($blue, 14%);
+			transition: background 0.2s;
+		}
+
+	}
+}
 #home {
-  fullstack-logo {
-    padding-top: 30px;
-    width: 150px;
-    margin: 0 auto;
-  }
-  h1 {
-    margin-top: 40px;
-    text-align: center;
-  }
+	fullstack-logo {
+		padding-top: 30px;
+		width: 150px;
+		margin: 0 auto;
+	}
+	h1 {
+		margin-top: 40px;
+		text-align: center;
+	}
 }
 
+h2#title-home {
+	color: white;
+	padding-top: 5%;
+	text-align: center;
+	font-size: 5.3em;
+}
+#home-photos {
+	background-color: white;
+	width: 100%;
+	padding-top: 10%;
+	ul {
+		padding-left: 18%;
+		width: 100%;
+		li {
+
+			list-style-type: none;
+
+			img {
+				width: 10%;
+				height: 10%;
+				float: left;
+				margin-right: 18%;
+			}
+			&:nth-child(1) {
+				margin: none;
+
+			}
+		}
+	}
+}
+
+#title-home {
+	color: darken(white, 7%);
+	padding-top: 0%;
+	font-size: 4.5em;
+	font-weight: 100;
+	font-family:  'Helvetica Neue',sans-serif;
+	letter-spacing: 1px;
+}
+
+#subtitle-home {
+	color: $darkBlue;
+	text-align: center;
+	font-size: 2.5em;
+	padding-top: -2%;
+	font-weight: lighter;
+	font-family: 'Helvetica Neue', sans-serif;
+}
+
+#img1 {
+	padding-left: 70px;
+
+}
+#img2 {
+	padding-left: 70px;
+}
