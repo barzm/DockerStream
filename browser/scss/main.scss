@@ -1,3 +1,4 @@
+@import 'variables/main';
 * {
   box-sizing: border-box;
 }
@@ -10,6 +11,11 @@
   }
 }
 
+
+body {
+	font-family: sans-serif;
+	color: $darkBlue;
+}
 @import 'directives/main';
 @import 'home/main';
 @import 'about/main';

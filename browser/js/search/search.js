@@ -10,11 +10,11 @@ app.config(function ($stateProvider) {
 
 app.controller('SearchCtrl', function ($scope, Search) {
 
-    $scope.searchInput = null;
+    $scope.input = null;
     $scope.results = null;
-
     $scope.search = function () {
-        Search.repositories($scope.searchInput)
+        console.log('hello');
+        Search.repositories($scope.input)
         .then(function (response) {
             $scope.results = response;
             console.log($scope.results);
