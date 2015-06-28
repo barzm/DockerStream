@@ -13,7 +13,7 @@ class Pipe {
 		this.imgName = uuid.v1();
 		this.username = this.gitUrl.split('/')[3];
 		this.repo = this.gitUrl.split('/')[4];
-	},
+	}
 	runPipe() {
 		console.log('downloading repository');
 		console.log(`saving repository to: ${this.targetDirectory}/${username}-${repo}`);
@@ -36,7 +36,7 @@ class Pipe {
 			buildAndRunDocker()
 			return file
 		})
-	},
+	}
 	buildAndRunDocker(){
 		var tarOptions = {
 			path: `${this.targetDirectory}/${username}-${repo}`,

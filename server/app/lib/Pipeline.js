@@ -9,19 +9,19 @@ class Pipeline {
 		this.uuid=generateId();
 		this.targetDir;
 		buildPipeline(pipeArray);
-	},
+	}
 	addPipe(gitUrl) { //add to mongo pipeline
 
-	},
+	}
 	getPipeline() {
 		return this.pipes;
-	},
+	}
 	generateId() {
 		this.uuid = uuid.v1();
 		this.targetDir = __dirname + '/containers/' + this.uuid;
 		exec('mkdir ' + this.targetDir);
 		exec('mkdir ' + this.targetDir + '/data')
-	},
+	}
 	buildPipeline(){
 		var pipe;
 		var pipeline = pipeArray.sort(function(a,b){
@@ -33,10 +33,10 @@ class Pipeline {
 		for(var i=0; i<l; i++){
 			this.pipes.push(new Pipe(pipeline[i].gitUrl,this.targetDir)) 
 		}
-	},
+	}
 	runPipeline(){
 		var l = this.pipes.length;
-		for(var i=0;i<l;i++){
+		for(var i=0; i<l; i++){
 			this.pipes[i].runPipe();
 		}
 	}
