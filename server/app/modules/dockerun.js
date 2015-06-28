@@ -1,22 +1,27 @@
 // this is where we instantiate containers and process user pipelines
 var Docker = require('dockerode-promise');
-var exec = require('exec'); 
 var ghdownload = require('github-download');
 var fs = require('fs'); //used to access dockerfile
-var log = require("npmlog");
-var axios = require('axios');
 var request = require('request');
 var Promise = require('bluebird');
-var tartar = require('tar.gz');
 var exec = require('child_process').exec;
+var Pipe = require('./Pipe');
+var Pipeline = require('./Pipeline');
 
 
 Promise.promisifyAll(fs);
 
 module.exports = {
-	downloadRepo: downloadRepo
+	downloadRepo: downloadRepo,
+	run:run
 }
 
+function run(){
+	// var pipeline = new Pipeline({gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1},{gitUrl: 'https://github.com/mbarzizza/DockerTest2',order:2});
+	var pipeline = new Pipeline({gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1});
+	pipeline.buildPipeline();
+	pipeline.runPipeline();
+}
 function downloadRepo() {
 	console.log("executing run module")
 	
@@ -47,11 +52,6 @@ function downloadRepo() {
 
 }
 
-function expandRepo(directory){
-
-
-}
-
 
 function buildDockerImage (tarPath){
 
@@ -68,11 +68,11 @@ function buildDockerImage (tarPath){
 
 	// })
 
-	var child = exec('cd server/app/modules/temp/dockertest; docker build -t nodetest .; docker run nodetest',function(error,stdout,stderr){
-		console.log("error : ", error);
-		console.log("stdout : ", stdout);
-		console.log("stderr : ", stderr);  
-	});
+	// var child = exec('cd server/app/modules/temp/dockertest; docker build -t nodetest .; docker run nodetest',function(error,stdout,stderr){
+	// 	console.log("error : ", error);
+	// 	console.log("stdout : ", stdout);
+	// 	console.log("stderr : ", stderr);  
+	// });
 }
 
 
