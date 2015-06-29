@@ -51,6 +51,7 @@ class Pipe {
 				return self.findDockerDir(self.username,self.repo)
 				.then(function(dir){
 					console.log('DIR',dir)
+					// refactor
 					var volumeDir = '/home/vagrant/DockerStream/'+self.targetDirectory.slice(1);
 					console.log('VOLUME DIR',volumeDir);
 					console.log('SPAWN DIR',volumeDir + '/' + dir);
