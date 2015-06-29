@@ -19,7 +19,7 @@ class Pipe {
 	}
 	runPipe(githubToken) {
 		//test
-		githubToken = 'ba05d275c58eca8eacf1251d45123737b8d2ee60'
+		githubToken = ''
 		console.log('downloading repository');
 		console.log(`saving repository to: ${this.targetDirectory}/${this.username}-${this.repo}`);
 		var self = this;
@@ -55,11 +55,8 @@ class Pipe {
 					var volumeDir = '/home/vagrant/DockerStream/'+self.targetDirectory.slice(1);
 					console.log('VOLUME DIR',volumeDir);
 					console.log('SPAWN DIR',volumeDir + '/' + dir);
-					spawn('cd',[volumeDir + '/' + dir])
-					.then(function(){
-						console.log("about to docker build");
-						return spawn('sudo docker build',['-t',self.imgName + ' .'])
-					})
+					// spawn('cd',[volumeDir + '/' + dir])
+					spawn('sudo docker build',['-t',self.imgName + ' .'])
 					.then(function(){
 						console.log("about to docker run");
 						return spawn('sudo docker run',['-v',__dirname + volumeDir  + '/data ' + self.imgName])
