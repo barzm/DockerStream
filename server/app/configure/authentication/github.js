@@ -16,6 +16,7 @@ module.exports = function(app) {
     };
 
     var verifyCallback = function(accessToken, refreshToken, profile, done) {
+        console.log('Here is my acccessss tookoeeen', accessToken);
         UserModel.findOne({
             'github.id': profile.id
         }, function(err, user) {
