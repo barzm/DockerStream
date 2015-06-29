@@ -16,13 +16,13 @@ class Pipe {
 	}
 	runPipe(githubToken) {
 		//test
-		githubToken = '3afda4593b90cc736160fc475fcfebad0e7d1934'
+		githubToken = 'ec443496349e4446c31dfb303f6da63dcb63b2aa'
 		console.log('downloading repository');
 		console.log(`saving repository to: ${this.targetDirectory}/${this.username}-${this.repo}`);
 		var self = this;
 		var file = fs.createWriteStream(`${this.targetDirectory}/${this.username}-${this.repo}.tar.gz`);
 		var options = {
-			url: `https://api.github.com/repos/${this.username}/${this.repo}/tarball`,
+			url: `https://api.github.com/repos/${this.username}/${this.repo}/tarball?access_token=${githubToken}`,
 			headers: {
 				'User-Agent': 'request'
 			}
@@ -49,8 +49,10 @@ class Pipe {
 				self.findDockerDir(self.username,self.repo)
 				.then(function(dir){
 					console.log('DIR',dir)
-					var child = exec('cd ' + self.targetDirectory + '/' + dir + '; docker build -t ' + self.imgName + ' .; docker run -v ' + self.targetDirectory + '/data ' + self.imgName)
+					var volumeDir = self.targetDirectory.slice(1);
+					var child = exec('cd ' + self.targetDirectory + '/' + dir + '; sudo docker build -t ' + self.imgName + ' .; sudo docker run -v ' + __dirname + '/' + volumeDir  + '/data ' + self.imgName)
 					.then(function(result){
+						console.log("DOCKER RESULTS");
 						console.log("stdout : ", result.stdout);
 						console.log("stderr : ", result.stderr);  
 					})
