@@ -3,7 +3,10 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 var tar = require('tarball-extract');
 var Promise = require('bluebird'); 
-var exec = require('child-process-promise').exec;
+var exec = require('child-process-promise');
+var spawn = exec.spawn;
+
+
 fs = Promise.promisifyAll(fs);
 class Pipe {
 	constructor(gitUrl,targetDirectory) {
@@ -31,13 +34,12 @@ class Pipe {
 			
 		})
 		.on('data',function (data){
-			console.log("writing data" )
-			file.write(data)
+			console.log("writing data");
+			file.write(data);
 		})
 		.on('end',function (){
-			file.end()
-			self.buildAndRunDocker()
-			return file
+			file.end();
+			return self.buildAndRunDocker();
 		})
 	}
 	buildAndRunDocker(){
@@ -46,19 +48,32 @@ class Pipe {
 		tar.extractTarball(`${this.targetDirectory}/${this.username}-${this.repo}.tar.gz`,self.targetDirectory,function(err,result){
 			if(err) console.log("EXTRACT ERROR",err)
 			else{
-				self.findDockerDir(self.username,self.repo)
+				return self.findDockerDir(self.username,self.repo)
 				.then(function(dir){
 					console.log('DIR',dir)
 					var volumeDir = self.targetDirectory.slice(1);
-					var child = exec('cd ' + self.targetDirectory + '/' + dir + '; sudo docker build -t ' + self.imgName + ' .; sudo docker run -v ' + __dirname + '/' + volumeDir  + '/data ' + self.imgName)
-					.then(function(result){
-						console.log("DOCKER RESULTS");
-						console.log("stdout : ", result.stdout);
-						console.log("stderr : ", result.stderr);  
+
+					spawn('cd',[self.targetDirectory + '/' + dir])
+					.then(function(){
+						return spawn('sudo docker build',['-t',self.imgName + ' .'])
 					})
-					.fail(function(err){
-						console.log("ERR",err)
+					.then(function(){
+						return spawn('sudo docker run',['-v',__dirname + '/' + volumeDir  + '/data ' + self.imgName])
 					})
+
+
+
+
+
+					// var child = spawn('cd ' + self.targetDirectory + '/' + dir + '; sudo docker build -t ' + self.imgName + ' .; sudo docker run -v ' + __dirname + '/' + volumeDir  + '/data ' + self.imgName)
+					// .then(function(result){
+					// 	console.log("DOCKER RESULTS");
+					// 	console.log("stdout : ", result.stdout);
+					// 	console.log("stderr : ", result.stderr);  
+					// })
+					// .fail(function(err){
+					// 	console.log("ERR",err)
+					// })
 				})
 
 			}
