@@ -19,7 +19,7 @@ class Pipe {
 	}
 	runPipe(githubToken) {
 		//test
-		githubToken = 'ec443496349e4446c31dfb303f6da63dcb63b2aa'
+		githubToken = 'ba05d275c58eca8eacf1251d45123737b8d2ee60'
 		console.log('downloading repository');
 		console.log(`saving repository to: ${this.targetDirectory}/${this.username}-${this.repo}`);
 		var self = this;
@@ -52,13 +52,20 @@ class Pipe {
 				.then(function(dir){
 					console.log('DIR',dir)
 					var volumeDir = self.targetDirectory.slice(1);
+					console.log('VOLUME DIR',volumeDir);
+					console.log('SPAWN DIR',__dirname + volumeDir + '/' + dir);
 
-					spawn('cd',[self.targetDirectory + '/' + dir])
+					spawn('cd',[__dirname + volumeDir + '/' + dir])
 					.then(function(){
+						console.log("about to docker build");
 						return spawn('sudo docker build',['-t',self.imgName + ' .'])
 					})
 					.then(function(){
-						return spawn('sudo docker run',['-v',__dirname + '/' + volumeDir  + '/data ' + self.imgName])
+						console.log("about to docker run");
+						return spawn('sudo docker run',['-v',__dirname + volumeDir  + '/data ' + self.imgName])
+					})
+					.fail(function(err){
+						console.log("FAIL:",err.stack);
 					})
 
 
