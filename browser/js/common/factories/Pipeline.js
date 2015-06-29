@@ -25,9 +25,17 @@ app.factory('Pipeline', function($http) {
 		})
 	}
 
+	function updatePipelines (pipelines) {
+		return $http.put('/api/user', pipelines)
+		.then(function (response) {
+			return response.data;
+		})
+	}
+
 	return {
 		create: createPipeline,
 		get: getPipelines,
-		add: addToPipeline
+		add: addToPipeline,
+		update: updatePipelines
 	}
 })
