@@ -1,8 +1,8 @@
 <section id="search">
 	<form class='form' ng-submit='search()'></form>
-		<input  type="text" ng-model='input' placeholder="Search for a repository">
-		<button type='button' ng-click='search()' class='btn btn-primary'>Search Github</button>
-	</form>
+	<input  type="text" ng-model='input' placeholder="Search for a repository">
+	<button type='button' ng-click='search()' class='btn btn-primary'>Search Github</button>
+</form>
 </section>
 
 <div id='search-results'>
@@ -10,13 +10,18 @@
 		<li id='repo-item'>
 			<h3 class="repo-list-name">
 				<a href='{{ result.html_url }}'>{{ result.full_name }}</a>
-				<i id="addButton" class="fa fa-2x fa-plus-square-o" ng-click="addToPipeline(result)"></i>
-			</h3>
+				<span id='success-msg' ng-if='pipelineSelect'>
+					Added successfully <i class='fa fa-check-circle-o'></i>
+				</span>
+				<md-select id='plus-menu' ng-model="pipelineSelect" placeholder="Add to pippy">
+				<md-option ng-repeat="pipeline in pipelines" value="{{pipeline.name}}">{{pipeline.name}}</md-option>
+			</md-select>
+		</h3>
 
-			<p class="repo-list-description">
-				{{ result.description }}
-			</p>
+		<p class="repo-list-description">
+			{{ result.description }}
+		</p>
 
-		</li>
-	</ul>
+	</li>
+</ul>
 </div>

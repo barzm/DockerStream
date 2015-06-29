@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
 	user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+	name: String,
 	pipeline: [{
 		gitUrl: { type: String, required: true },
 		order: { type: Number, required: true }
