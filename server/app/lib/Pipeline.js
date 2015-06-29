@@ -48,6 +48,7 @@ class Pipeline {
 					return 0
 				})
 				var l = pipeline.length
+				
 				for(var i=0; i<l; i++){
 					self.pipes.push(new Pipe(pipeline[i].gitUrl,self.targetDir)) 
 				}
