@@ -51,11 +51,10 @@ class Pipe {
 				return self.findDockerDir(self.username,self.repo)
 				.then(function(dir){
 					console.log('DIR',dir)
-					var volumeDir = self.targetDirectory.slice(1);
+					var volumeDir = '/home/vagrant/DockerStream/'+self.targetDirectory.slice(1);
 					console.log('VOLUME DIR',volumeDir);
-					console.log('SPAWN DIR',__dirname + volumeDir + '/' + dir);
-
-					spawn('cd',[__dirname + volumeDir + '/' + dir])
+					console.log('SPAWN DIR',volumeDir + '/' + dir);
+					spawn('cd',[volumeDir + '/' + dir])
 					.then(function(){
 						console.log("about to docker build");
 						return spawn('sudo docker build',['-t',self.imgName + ' .'])
@@ -67,11 +66,6 @@ class Pipe {
 					.fail(function(err){
 						console.log("FAIL:",err.stack);
 					})
-
-
-
-
-
 					// var child = spawn('cd ' + self.targetDirectory + '/' + dir + '; sudo docker build -t ' + self.imgName + ' .; sudo docker run -v ' + __dirname + '/' + volumeDir  + '/data ' + self.imgName)
 					// .then(function(result){
 					// 	console.log("DOCKER RESULTS");
