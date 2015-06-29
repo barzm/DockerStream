@@ -3,8 +3,11 @@ var fs = require('fs');
 var uuid = require('node-uuid');
 var tar = require('tarball-extract');
 var Promise = require('bluebird'); 
-var exec = require('child-process-promise').exec;
-Promise.promisifyAll(fs);
+var exec = require('child-process-promise');
+var spawn = exec.spawn;
+
+
+fs = Promise.promisifyAll(fs);
 class Pipe {
 	constructor(gitUrl,targetDirectory) {
 		// this.order = order;
@@ -16,7 +19,7 @@ class Pipe {
 	}
 	runPipe(githubToken) {
 		//test
-		githubToken = '3afda4593b90cc736160fc475fcfebad0e7d1934'
+		githubToken = ''
 		console.log('downloading repository');
 		console.log(`saving repository to: ${this.targetDirectory}/${this.username}-${this.repo}`);
 		var self = this;
@@ -31,13 +34,12 @@ class Pipe {
 			
 		})
 		.on('data',function (data){
-			console.log("writing data" )
-			file.write(data)
+			console.log("writing data");
+			file.write(data);
 		})
 		.on('end',function (){
-			file.end()
-			self.buildAndRunDocker()
-			return file
+			file.end();
+			return self.buildAndRunDocker();
 		})
 	}
 	buildAndRunDocker(){
@@ -46,14 +48,51 @@ class Pipe {
 		tar.extractTarball(`${this.targetDirectory}/${this.username}-${this.repo}.tar.gz`,self.targetDirectory,function(err,result){
 			if(err) console.log("EXTRACT ERROR",err)
 			else{
-				console.log("TARBALL EXTRACTED")
-				var child = exec('cd ' + self.targetDirectory + '; docker build -t ' + self.imgName + ' .; docker run -v ' + self.targetDirectory + '/data ' + self.imgName,function(error,stdout,stderr){
-					console.log("error : ", error);
-					console.log("stdout : ", stdout);
-					console.log("stderr : ", stderr);  
-				});
+				return self.findDockerDir(self.username,self.repo)
+				.then(function(dir){
+					console.log('DIR',dir)
+					// refactor
+					var volumeDir = '/home/vagrant/DockerStream/'+self.targetDirectory.slice(1);
+					console.log('VOLUME DIR',volumeDir);
+					console.log('SPAWN DIR',volumeDir + '/' + dir);
+					// spawn('cd',[volumeDir + '/' + dir])
+					spawn('sudo docker build',['-t',self.imgName + ' .'])
+					.then(function(){
+						console.log("about to docker run");
+						return spawn('sudo docker run',['-v',__dirname + volumeDir  + '/data ' + self.imgName])
+					})
+					.fail(function(err){
+						console.log("FAIL:",err.stack);
+					})
+					// var child = spawn('cd ' + self.targetDirectory + '/' + dir + '; sudo docker build -t ' + self.imgName + ' .; sudo docker run -v ' + __dirname + '/' + volumeDir  + '/data ' + self.imgName)
+					// .then(function(result){
+					// 	console.log("DOCKER RESULTS");
+					// 	console.log("stdout : ", result.stdout);
+					// 	console.log("stderr : ", result.stderr);  
+					// })
+					// .fail(function(err){
+					// 	console.log("ERR",err)
+					// })
+				})
+
 			}
 		})
+	}
+
+	findDockerDir(username,repo){
+		return fs.readdirAsync(this.targetDirectory)
+		.then(function(files){
+			var test = RegExp(username+'-'+repo+'-.');
+			var dir;
+			var l = files.length;
+			for(var i=0; i<l; i++){
+				if(test.test(files[i])){
+					return files[i];
+				} 		
+			}
+			return 
+		})
+
 	}	
 }
 module.exports = {
