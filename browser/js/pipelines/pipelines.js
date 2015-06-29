@@ -11,13 +11,25 @@ app.config(function($stateProvider) {
 app.controller('PipelinesCtrl', function($scope, Pipeline) {
 	$scope.pipelineName = null;
 	$scope.created = false;
+	$scope.pipelines = [];
+
 
 	$scope.createPipeline = function() {
 		Pipeline.create($scope.pipelineName)
 	     .then(function(response) {
-	     	console.log('response',response);
-			$scope.created = response;
+			$scope.created = true;
+			$scope.pipelineName = '';
+			$scope.pipelines = response.pipelines;
 		});
 	};
 
+	$scope.getPipelines = function() {
+		Pipeline.get()
+		.then(function(response) {
+			$scope.pipelines = response.pipelines;
+			console.log($scope.pipelines);
+		})
+	}
+
+	$scope.getPipelines();
 });

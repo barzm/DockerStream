@@ -20,11 +20,7 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
         $scope.getMyRepos();
     });
 
-    $scope.pipelines = [{
-        name: 'Boolean Aggregator'
-    }, {
-        name: 'Pied Pipeline'
-    }];
+    $scope.pipelines;
 
     (function(){
         User.get()
@@ -50,9 +46,9 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
         })
     };
 
-    $scope.addToPipeline = function(repo) {
+    $scope.addToPipeline = function(pipeline, repo) {
         console.log(repo);
-        Pipeline.create(repo)
+        Pipeline.add({id: pipeline, repo: repo})
         .then(function (response){
             console.log('response from creation', response);
         });

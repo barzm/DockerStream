@@ -15,6 +15,34 @@ var ensureAuthenticated = function(req, res, next) {
 };
 
 
+router.get('/', ensureAuthenticated, function(req, res, next) {
+	User.findById(req.user._id)
+	.populate('pipelines')
+	.exec()
+	.then(function(user) {
+		res.json(user);
+	})
+	.then(null, next)
+})
+
+
+router.put('/', ensureAuthenticated, function(req, res, next) {
+	Pipeline.findById(req.body.id)
+	.exec()
+	.then(function(pipeline) {
+		pipeline.pipeline.push({
+			name: req.body.repo.name,
+			gitUrl: req.body.repo.html_url,
+			description: req.body.repo.description,
+			order: pipeline.pipeline.length
+		});
+		console.log(pipeline);
+		pipeline.save(function(err, updatedPipeline) {
+			res.json(updatedPipeline);
+		})
+	})
+})
+
 
 router.post('/', ensureAuthenticated, function (req, res) {
 	var pipelineId;
@@ -30,7 +58,13 @@ router.post('/', ensureAuthenticated, function (req, res) {
 	.then(function (user) {
 		user.pipelines.push(pipelineId);
 		user.save(function (err, savedUser) {
-			res.json(savedUser);
+			// res.json(savedUser);
+			return User.findById(req.user._id)
+			.populate('pipelines')
+			.exec()
+			.then(function(user) {
+				res.json(user);
+			})
 		})
 	})
 });

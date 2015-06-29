@@ -13,8 +13,12 @@
 				<span id='success-msg' ng-if='pipelineSelect'>
 					Added successfully <i class='fa fa-check-circle-o'></i>
 				</span>
-				<md-select id='plus-menu' ng-model="pipelineSelect" placeholder="Add to pippy">
-				<md-option ng-repeat="pipeline in pipelines" value="{{pipeline.name}}">{{pipeline.name}}</md-option>
+				<md-select id='plus-menu' ng-model="pipelineSelect" placeholder="Add to Pipeline">
+
+				<md-option ng-repeat="pipeline in userPipelines" value="{{pipeline.name}}" ng-click="addToPipeline(pipeline._id, result)">
+				{{pipeline.name}}
+				</md-option>
+
 			</md-select>
 		</h3>
 
