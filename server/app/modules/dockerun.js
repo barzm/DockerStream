@@ -18,7 +18,7 @@ module.exports = {
 function run(githubToken){
 	// var pipeline = new Pipeline({gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1},{gitUrl: 'https://github.com/mbarzizza/DockerTest2',order:2});
 	console.log("running run")
-	var pipeline = new Pipeline([{gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1}]);
+	var pipeline = new Pipeline([{gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1},{gitUrl: 'https://github.com/mbarzizza/DockerTest2',order:2}]);
 	console.log("PIPELINE",pipeline)
 	pipeline.buildPipeline()
 	.then(function(){
