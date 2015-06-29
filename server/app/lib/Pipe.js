@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 var tar = require('tarball-extract');
 var Promise = require('bluebird'); 
 var exec = require('child-process-promise').exec;
-Promise.promisifyAll(fs);
+fs = Promise.promisifyAll(fs);
 class Pipe {
 	constructor(gitUrl,targetDirectory) {
 		// this.order = order;
@@ -22,7 +22,7 @@ class Pipe {
 		var self = this;
 		var file = fs.createWriteStream(`${this.targetDirectory}/${this.username}-${this.repo}.tar.gz`);
 		var options = {
-			url: `https://api.github.com/repos/${this.username}/${this.repo}/tarball?access_token=${githubToken}`,
+			url: `https://api.github.com/repos/${this.username}/${this.repo}/tarball`,
 			headers: {
 				'User-Agent': 'request'
 			}
@@ -46,14 +46,37 @@ class Pipe {
 		tar.extractTarball(`${this.targetDirectory}/${this.username}-${this.repo}.tar.gz`,self.targetDirectory,function(err,result){
 			if(err) console.log("EXTRACT ERROR",err)
 			else{
-				console.log("TARBALL EXTRACTED")
-				var child = exec('cd ' + self.targetDirectory + '; docker build -t ' + self.imgName + ' .; docker run -v ' + self.targetDirectory + '/data ' + self.imgName,function(error,stdout,stderr){
-					console.log("error : ", error);
-					console.log("stdout : ", stdout);
-					console.log("stderr : ", stderr);  
-				});
+				self.findDockerDir(self.username,self.repo)
+				.then(function(dir){
+					console.log('DIR',dir)
+					var child = exec('cd ' + self.targetDirectory + '/' + dir + '; docker build -t ' + self.imgName + ' .; docker run -v ' + self.targetDirectory + '/data ' + self.imgName)
+					.then(function(result){
+						console.log("stdout : ", result.stdout);
+						console.log("stderr : ", result.stderr);  
+					})
+					.fail(function(err){
+						console.log("ERR",err)
+					})
+				})
+
 			}
 		})
+	}
+
+	findDockerDir(username,repo){
+		return fs.readdirAsync(this.targetDirectory)
+		.then(function(files){
+			var test = RegExp(username+'-'+repo+'-.');
+			var dir;
+			var l = files.length;
+			for(var i=0; i<l; i++){
+				if(test.test(files[i])){
+					return files[i];
+				} 		
+			}
+			return 
+		})
+
 	}	
 }
 module.exports = {
