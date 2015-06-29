@@ -65,8 +65,18 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
    config.vm.provision "shell", inline: <<-SHELL
+      sudo apt-get install --yes build-essential
+      sudo apt-get install python-software-properties
+      sudo add-apt-repository ppa:chris-lea/node.js
       sudo apt-get update
+      sudo apt-get install nodejs --yes
+      sudo apt-get install npm
       sudo apt-get install git
+      sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+      echo "deb http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list
+      sudo apt-get update
+      sudo apt-get install -y mongodb-org
       wget -qO- https://get.docker.com/ | sh
+      sudo npm install -g gulp
   SHELL
 end
