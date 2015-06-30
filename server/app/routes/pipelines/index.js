@@ -15,6 +15,26 @@ var ensureAuthenticated = function(req, res, next) {
 };
 
 
+router.delete('/:id', ensureAuthenticated, function(req, res, next) {
+	Pipeline.findByIdAndRemove(req.params.id)
+	.exec()
+	.then(function(removed) {
+		return User.findById(req.user._id)
+		.exec()
+		.then(function(user) {
+			user.pipelines = user.pipelines.filter(function(id) {
+				return id.toString() !== req.params.id;
+			})
+			user.save(function(err, user) {
+
+			})
+		})
+		.then(function(user) {
+			res.json(user);
+		})
+	})
+})
+
 router.get('/', ensureAuthenticated, function(req, res, next) {
 	User.findById(req.user._id)
 	.populate('pipelines')
