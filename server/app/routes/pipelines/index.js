@@ -76,7 +76,7 @@ router.post('/', ensureAuthenticated, function (req, res) {
 		.exec();
 	})
 	.then(function (user) {
-		user.pipelines.push(pipelineId);
+		user.pipelines.unshift(pipelineId);
 		user.save(function (err, savedUser) {
 			// res.json(savedUser);
 			return User.findById(req.user._id)

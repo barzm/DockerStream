@@ -12,7 +12,19 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 	$scope.pipelineName = null;
 	$scope.created = false;
 	$scope.models = {};
+    	$scope.loc = window.location.host;
+    	$scope.saved = 'untouched';
+    	$scope.demo = {
+        topDirections: ['left', 'up'],
+        bottomDirections: ['down', 'right'],
 
+        isOpen: false,
+        selectedMode: 'md-fling',
+        selectedDirection: 'right'
+     }
+    	$scope.getUrl = function (id) {
+    		return `https://${$scope.loc}/run/?id=${id}`;
+    	};
 
 	$scope.createPipeline = function() {
 		if (!$scope.pipelineName) return;
@@ -32,14 +44,15 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 				selected: null,
 				list: obj
 			}
-			console.log($scope.models);
 		})
-	}
+	};
 
 	$scope.updatePipelines = function () {
 		Pipeline.update($scope.models.list)
-	}
-
+		.then(function (response) {
+			$scope.saved = 'saved';
+		})
+	};
 
 	$scope.reorder = function() {
 		for (var pipelineObj in $scope.models.list) {
@@ -49,21 +62,18 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 				repo.order = ix;
 			})
 		}
+		$scope.saved = 'unsaved';
 	};
 
-	$scope.deleteRepo = function(pipeline, repo) {
-		$scope.models.list[pipeline.name].pipeline = 
-		$scope.models.list[pipeline.name].pipeline.filter(function(obj) {
-			return obj.name !== repo
-		})
+	$scope.deleteRepo = function(pipeline, ix) {
+		$scope.models.list[pipeline.name].pipeline.splice(ix, 1);
 		$scope.reorder();
+		$scope.updatePipelines();
 	};
 
 	$scope.deletePipeline = function(pipeline) {
-		console.log('delete', pipeline);
 		Pipeline.delete(pipeline)
 		.then(function() {
-			console.log($scope.models.list);
 			delete $scope.models.list[pipeline.name];
 		})
 	};
@@ -78,7 +88,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 			}
 		})
 		return obj;
-	}
+	};
 
 	$scope.getPipelines();
 });
