@@ -23,7 +23,7 @@ class Pipeline {
 	}
 	generateId() {
 		var self = this;
-		this.uuid = uuid.v1();
+		this.uuid = uuid.v4();
 		this.targetDir = './containers/' + this.uuid;
 		console.log("TARGET",this.targetDir)
 		return exec('mkdir ' + self.targetDir)
@@ -50,7 +50,6 @@ class Pipeline {
 					return 0
 				})
 				var l = pipeline.length
-				
 				for(var i=0; i<l; i++){
 					var newPipe = new Pipe(pipeline[i].gitUrl,self.targetDir);
 					// console.log("NEW PIPE HERE ", newPipe);
@@ -61,6 +60,7 @@ class Pipeline {
 						self.tail = self.head; 
 					}else{
 						self.tail.next = newPipe;
+						newPipe.prev = self.tail;
 						self.tail = newPipe; 
 					}
 				}
@@ -75,15 +75,15 @@ class Pipeline {
 	}
 
 	runPipeline(githubToken){
-		console.log("ABOUT TO RUN PIPELINE")
-		// var l = this.pipearr.length;
+		var self = this;
 		function executePipe(pipe){
 			pipe.runPipe().then(function(){
 				console.log("about to execute pipe");
-				if(pipe.next)executePipe(pipe.next);
+				if(pipe.next)
+					executePipe(pipe.next);
 				else{
 					console.log('end of pipeline');
-					//handle data output
+					return self.targetDir+'/data/output.json';
 				}
 			}).catch(function(err){
 				console.log("Error in pipeline: ",err); 
