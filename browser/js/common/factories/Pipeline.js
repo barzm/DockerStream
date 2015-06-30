@@ -32,10 +32,18 @@ app.factory('Pipeline', function($http) {
 		})
 	}
 
+	function deletePipeline (pipeline) {
+		return $http.delete('/api/pipelines/' + pipeline.pipelineId)
+		.then(function(response) {
+			return response.data;
+		})
+	}
+
 	return {
 		create: createPipeline,
 		get: getPipelines,
 		add: addToPipeline,
-		update: updatePipelines
+		update: updatePipelines,
+		delete: deletePipeline
 	}
 })

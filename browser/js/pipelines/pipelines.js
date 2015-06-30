@@ -51,6 +51,21 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 		}
 	};
 
+	$scope.deleteRepo = function(pipeline, repo) {
+		$scope.models.list[pipeline.name].pipeline = 
+		$scope.models.list[pipeline.name].pipeline.filter(function(obj) {
+			return obj.name !== repo
+		})
+	};
+
+	$scope.deletePipeline = function(pipeline) {
+		console.log('delete', pipeline);
+		Pipeline.delete(pipeline)
+		.then(function() {
+			delete $scope.models.list[pipeline.name];
+		})
+	};
+
 	function makePipelineModel(data) {
 		var obj = {};
 		data.pipelines.forEach(function(pipeline) {
