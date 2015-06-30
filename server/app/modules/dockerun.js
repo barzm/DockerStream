@@ -4,27 +4,125 @@ var ghdownload = require('github-download');
 var fs = require('fs'); //used to access dockerfile
 var request = require('request');
 var Promise = require('bluebird');
-var exec = require('child_process').exec;
+var exec = require('child-process-promise').exec;
+var tar = require('tarball-extract');
 var Pipe = require('../lib/Pipe').Pipe;
 var Pipeline = require('../lib/Pipeline').Pipeline;
+var mongoose = require('mongoose');
+var PipelineModel = mongoose.model('Pipeline');
+
 
 
 Promise.promisifyAll(fs);
 
 module.exports = {
-	run:run
+	run: run,
+	getRepository: getRepository,
+	buildImage: buildImage,
+	makeContainerDir:makeContainerDir
 }
 
-function run(githubToken){
-	console.log("running run")
-	var pipeline = new Pipeline([{gitUrl: 'https://github.com/mbarzizza/DockerTest',order:1},{gitUrl: 'https://github.com/mbarzizza/DockerTest2',order:2}]);
-	console.log("PIPELINE",pipeline)
-	return pipeline.buildPipeline()
+function run(pipelineId, cb) {
+
+	PipelineModel.findOneById(pipelineId, function(err, p) {
+			var pipeline = new Pipeline(p.pipeline);
+			pipeline.targetDir = '/containers/' + p._id;
+		})
+		.then(function(pipeline) {
+			return pipeline.buildPipeline();
+		})
+		.then(function(pipeline) {
+			return pipeline.runPipeline();
+		})
+		.then(function() {
+			console.log("PATH in run module!!!!!!!! ", path);
+			return path
+		})
+}
+
+function getRepository(gitUrl, pipelineId) {
+	console.log("IN get repo");
+	var targetDirectory = './containers/' + pipelineId;
+	var username = username = gitUrl.split('/')[3];
+	var repo = gitUrl.split('/')[4];
+	return new Promise(function(resolve, reject) {
+		var githubToken = 'b5c07451845a2a20ef7957faa272e87434c52ab1';
+		console.log('downloading repository');
+
+		var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
+		var options = {
+			url: `https://api.github.com/repos/${username}/${repo}/tarball?access_token=${githubToken}`,
+			headers: {
+				'User-Agent': 'request'
+			}
+		};
+		request.get(options).pipe(fileStream);
+		fileStream.on('finish', function() {
+			console.log("FILESTREAM write finished");
+			// buildImage(targetDirectory, username, gitUrl).then(resolve);
+			resolve();
+		});
+		fileStream.on('error', reject);
+	});
+
+}
+
+function makeContainerDir(pipelineId) {
+	console.log("IN makeContainerDir");
+	var targetDirectory = './containers/' + pipelineId;
+	return exec('mkdir ' + targetDirectory)
 	.then(function(){
-		return pipeline.runPipeline(githubToken);
+		console.log("MADE CONTAINER DIRECTORY");
+		return exec('mkdir '+targetDirectory+'/data')
+		
 	})
-	.then(function(path){
-		return path
+	.catch(function(err){
+		console.log('Error in makeContainerDir',err,err.stack.split('\n'));
 	})
+
 }
 
+function buildImage(imgName, targetDirectory,gitUrl) {
+
+	console.log("Building Docker Image");
+	console.log("PASSED GITURL ", gitUrl );
+
+	var username= gitUrl.split('/')[3];
+	var repo = gitUrl.split('/')[4];
+	var extractPromised = Promise.promisify(tar.extractTarball);
+	console.log("BUILD IMAGE USERNAME ", username);
+	console.log("BUILD IMAGE REPO " , repo);
+
+	return extractPromised(`${targetDirectory}/${username}-${repo}.tar.gz`, targetDirectory)
+		.then(function() {
+			console.log('extraction hit');
+			return findDockerDir(username, repo, targetDirectory);
+		}).then(function(dir) {
+			console.log("ABOUT TO BUILD IMAGE",'cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
+			// return exec(`cd ${targetDirectory}/${dir}; sudo docker build -t ${imgName} .; sudo docker run --name ${id} -v /vagrant ${volumeDir} /data:/data ${imgName}`);
+			return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
+			.then(function(result){
+				console.log('STDOUT', result.stdout);
+				console.lot('STDERR', result.stderr);
+				return
+			})
+			.fail(function(err){
+				console.log("ERR FAIL",err);
+			})
+
+		}).catch(function(err) {
+			console.error(err.message, err.stack.split('\n'));
+		});
+
+}
+
+function findDockerDir(username, repo, targetDirectory) {
+
+	return fs.readdirAsync(targetDirectory)
+		.then(function(files) {
+			let test = new RegExp(username + '-' + repo + '-.');
+			let matchedFile = files.filter(file => test.test(file))[0];
+			return matchedFile;
+		})
+
+}
