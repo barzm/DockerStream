@@ -1,5 +1,6 @@
 'use strict'
 var mongoose = require('mongoose');
+var uuid = require('node-uuid'); 
 
 var schema = new mongoose.Schema({
 	user: {
@@ -12,12 +13,14 @@ var schema = new mongoose.Schema({
 		gitUrl: String,
 		description: String,
 		order: Number,
-		_id: false
+		_id: false,
+		imageId: {type:String, required:true, default:uuid.v4}
 	}],
 	runs: [{
 		type: Date,
 		required: true
 	}]
 });
+
 
 mongoose.model('Pipeline', schema)
