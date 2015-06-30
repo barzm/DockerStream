@@ -56,12 +56,14 @@ app.controller('PipelinesCtrl', function($scope, Pipeline) {
 		$scope.models.list[pipeline.name].pipeline.filter(function(obj) {
 			return obj.name !== repo
 		})
+		$scope.reorder();
 	};
 
 	$scope.deletePipeline = function(pipeline) {
 		console.log('delete', pipeline);
 		Pipeline.delete(pipeline)
 		.then(function() {
+			console.log($scope.models.list);
 			delete $scope.models.list[pipeline.name];
 		})
 	};
