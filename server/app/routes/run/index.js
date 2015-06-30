@@ -8,9 +8,10 @@ module.exports = router;
 
 router.get('/',function(req,res,next){
 	console.log('route hit');
-	run.run()
+	run.run(req.query.id,req.query.callback)
 	.then(function(path){
 		console.log('sending data back')
+		console.log(path);
 		res.send(path);
 	})
 	.catch(function(err){
