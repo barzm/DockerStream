@@ -4,7 +4,7 @@ module.exports = {
   "GITHUB": {
     "clientID": '239519e9b7bc74205b9b',
     "clientSecret": '05a53f842f3b6646bcc8225a87ba3992440bb11b',
-    "callbackURL": 'http://127.0.0.1:1337/auth/github/callback'
+    "callbackURL": 'http://127.0.0.1:8080/auth/github/callback'
   },
   'GITHUBKEY':'1f094a2e8c8789c0a4816aee932d0eed3b9b0017'
 };

@@ -12,9 +12,9 @@
 
 	<div class='pipeline-body' ng-repeat="pipeline in models.list">
 		<h2 id='pipeline-name'>
-			{{ pipeline.name }}	
+			{{ pipeline.name }}
 			<span class="clipboard-container">
-				<input type="text" onClick='this.select()' value="http://{{loc}}:1337/api/run{{pipeline.pipelineId}}" readonly='readonly'>
+				<input type="text" onClick='this.select()' value="http://{{loc}}:8080/api/run{{pipeline.pipelineId}}" readonly='readonly'>
 				<span class="input-group-button">
 					<button id='clippy' aria-label='Copy to clipboard' data-copied-hint='Copied!' clip-copy='getUrl(pipeline.pipelineId)'><i class='fa fa-clipboard'></i></button>
 			</span>
