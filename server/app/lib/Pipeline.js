@@ -24,25 +24,24 @@ class Pipeline {
         return this.pipes;
     }
 
-    // generateId() {
-    //     var self = this;
-    //     this.uuid = uuid.v4();
-    //     this.targetDir = './containers/' + this.uuid;
-    //     console.log("TARGET", this.targetDir)
-    //     return exec('mkdir ' + self.targetDir)
-    //         .then(function () {
-    //             console.log("MAKING data folder")
-    //             return exec('mkdir ' + self.targetDir + '/data')
-    //         })
-    //         .catch(function (err) {
-    //             console.log("ERROR IN generateId", err.stack)
-    //         })
+    generateId() {
+        var self = this;
+        this.uuid = uuid.v4();
+        this.targetDir = './containers/' + this.uuid;
+        console.log("TARGET", this.targetDir)
+        return exec('mkdir ' + self.targetDir)
+            .then(function () {
+                console.log("MAKING data folder")
+                return exec('mkdir ' + self.targetDir + '/data')
+            })
+            .catch(function (err) {
+                console.log("ERROR IN generateId", err.stack)
+            })
 
-    // }
+    }
 
     buildPipeline() {
         var self = this;
-
         return self.generateId()
             .then(function () {
                 // console.log("PIPELINE IN BUILD",self.pipeArray)

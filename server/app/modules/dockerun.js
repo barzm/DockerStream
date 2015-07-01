@@ -10,6 +10,7 @@ var Pipe = require('../lib/Pipe').Pipe;
 var Pipeline = require('../lib/Pipeline').Pipeline;
 var mongoose = require('mongoose');
 var PipelineModel = mongoose.model('Pipeline');
+var env = require('../../env/development');
 
 
 
@@ -23,10 +24,15 @@ module.exports = {
 }
 
 function run(pipelineId, cb) {
-
-	PipelineModel.findOneById(pipelineId, function(err, p) {
+	return PipelineModel.findById(pipelineId)
+			// console.log("FOUND PIPELINE ", p);
+			// var pipeline = new Pipeline(p.pipeline);
+			// pipeline.targetDir = '/containers/' + p._id;
+			// return pipeline;
+		.exec().then(function(p){
 			var pipeline = new Pipeline(p.pipeline);
-			pipeline.targetDir = '/containers/' + p._id;
+			pipeline.targetDir = '/containers/'+p._id;
+			return pipeline;
 		})
 		.then(function(pipeline) {
 			return pipeline.buildPipeline();
@@ -38,6 +44,9 @@ function run(pipelineId, cb) {
 			console.log("PATH in run module!!!!!!!! ", path);
 			return path
 		})
+		.then(null,function(err){
+			console.log("Error in run: ",err.message,err.stack.split('\n'));
+		})
 }
 
 function getRepository(gitUrl, pipelineId) {
@@ -46,7 +55,8 @@ function getRepository(gitUrl, pipelineId) {
 	var username = username = gitUrl.split('/')[3];
 	var repo = gitUrl.split('/')[4];
 	return new Promise(function(resolve, reject) {
-		var githubToken = 'b5c07451845a2a20ef7957faa272e87434c52ab1';
+		console.log("GITHUB KEY", env.GITHUBKEY);
+		var githubToken = env.GITHUBKEY;
 		console.log('downloading repository');
 
 		var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
@@ -74,7 +84,7 @@ function makeContainerDir(pipelineId) {
 	.then(function(){
 		console.log("MADE CONTAINER DIRECTORY");
 		return exec('mkdir '+targetDirectory+'/data')
-		
+
 	})
 	.catch(function(err){
 		console.log('Error in makeContainerDir',err,err.stack.split('\n'));
@@ -103,7 +113,10 @@ function buildImage(imgName, targetDirectory,gitUrl) {
 			return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
 			.then(function(result){
 				console.log('STDOUT', result.stdout);
-				console.lot('STDERR', result.stderr);
+				console.log('STDERR', result.stderr);
+				if(!result.stderr){
+					return exec('rm -rf ' + targetDirectory + '/' + dir)
+				}
 				return
 			})
 			.fail(function(err){
