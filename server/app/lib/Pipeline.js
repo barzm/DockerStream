@@ -23,7 +23,7 @@ class Pipeline {
         console.log("TARGET", this.targetDir)
         return exec('mkdir ' + self.targetDir)
             .then(function () {
-                console.log("MAKING data folder")
+                console.log("MAKING data folder",self.targetDir)
                 return exec('mkdir ' + self.targetDir + '/data')
             })
             .catch(function (err) {
@@ -35,8 +35,7 @@ class Pipeline {
     buildPipeline() {
       console.log("\n=========BUILDING PIPELINE=========\n");
         var self = this;
-        return self.generateId()
-            .then(function () {
+
                 // console.log("PIPELINE IN BUILD",self.pipeArray)
                 var pipeline = self.pipeArray.sort(function (a, b) {
                     if (a.order > b.order) return 1
@@ -57,7 +56,7 @@ class Pipeline {
                 }
                 var cur = self.head;
                 return self
-            });
+
     }
 
     runPipeline() {

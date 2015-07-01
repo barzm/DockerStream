@@ -31,6 +31,7 @@ function run(pipelineId, cb,githubToken) {
 			// return pipeline;
 		.exec().then(function(p){
 			var pipeline = new Pipeline(p.pipeline);
+			pipeline.mongoId = p._id;
 			pipeline.targetDir = '/containers/'+p._id;
 			return pipeline;
 		})
