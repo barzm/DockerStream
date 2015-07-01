@@ -14,7 +14,7 @@
 		<h2 id='pipeline-name'>
 			{{ pipeline.name }}	
 			<span class="clipboard-container">
-				<input type="text" onClick='this.select()' value="https://{{loc}}:1337/run/{{pipeline.pipelineId}}" readonly='readonly'>
+				<input type="text" onClick='this.select()' value="http://{{loc}}:1337/api/run{{pipeline.pipelineId}}" readonly='readonly'>
 				<span class="input-group-button">
 					<button id='clippy' aria-label='Copy to clipboard' data-copied-hint='Copied!' clip-copy='getUrl(pipeline.pipelineId)'><i class='fa fa-clipboard'></i></button>
 			</span>
@@ -24,14 +24,26 @@
 			<md-button class='md-raised' ng-disabled="saved == 'untouched'" ng-class="{'md-primary': saved === 'unsaved'}" ng-click='updatePipelines()'>Save</md-button>
 		</span>
 	</h2>
+	<section layout="row" layout-sm="column" layout-align="center center">
+		<md-input-container id='new-name-input'>
+			<label>Search Github</label>
+			<input ng-enter='search(searchInput)' ng-model='searchInput'></input>
+		</md-input-container>
+		<md-input-container id='new-name-input'>
+			<label>Add by URL</label>
+			<input ng-enter='getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
+		</md-input-container>
+	</section>
 	<ul id='user-pipeline'  dnd-list='pipeline.pipeline'>
 		<li id='repo-box' ng-repeat="repo in pipeline.pipeline" dnd-draggable='repo' dnd-moved='pipeline.pipeline.splice($index, 1); reorder()' dnd-effect-allowed='move' dnd-selected='models.selected = repo' ng-class="{'selected': models.selected === repo}">
 			<ul id='pipeline-repo'>
 				<li><h3>{{ repo.name }}<i class='fa fa-times' ng-click='deleteRepo(pipeline, $index)'></i></h3></li>
 				<li>{{ repo.description }}</li>
-				<li><a href="{{ repo.gitUrl }}">{{ repo.gitUrl }}</a></li>
+				<li><a href="{{ repo.gitUrl }}" target="_blank">{{ repo.gitUrl }}</a></li>
 			</ul>
 		</li>
 	</ul>
+	<div>
+	</div>
 </div>
 </div>

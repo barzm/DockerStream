@@ -5,31 +5,21 @@
 	width: 100%;
 	padding: 20px;
 	margin: none;
-	img {
-		position: absolute;
-		bottom: 0;
-		right: 48.6%;
-		width: 42px;
-		height: 42px;
-		transform: scale(1, 1);
-		cursor: pointer;
+	.fa-chevron-down {
+		margin-top: 15%;
 	}
 	button {
-		margin-top: 15%;
-		position: absolute;
-		right: 42.7%;
+		margin-top: 5%;
 		font-size: 2em;
 		background: transparent;
 		font-weight: lighter;
 		i {
 			font-size: 1em;
 		}
-
 		&:hover {
 			background: darken($blue, 14%);
 			transition: background 0.2s;
 		}
-
 	}
 }
 #home {

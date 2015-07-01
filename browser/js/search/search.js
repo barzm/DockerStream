@@ -1,15 +1,14 @@
 app.config(function($stateProvider) {
 
     $stateProvider.state('search', {
-        url: '/search',
+        url: '/search/:input',
         templateUrl: 'js/search/search.html',
         controller: 'SearchCtrl'
     });
 
 });
 
-app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User) {
-
+app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User, $stateParams) {
     $scope.input = null;
     $scope.results = null;
     $scope.pipelineSelect = null;
@@ -17,10 +16,13 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
 
     AuthService.getLoggedInUser().then(function(user) {
         $scope.user = user;
-        $scope.getMyRepos();
+        console.log($stateParams);
+        if (!$stateParams.input)
+            $scope.getMyRepos();
+        else 
+            $scope.input = $stateParams.input;
+            $scope.search();
     });
-
-    $scope.pipelines;
 
     (function(){
         User.get()
@@ -31,11 +33,9 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
     )()
 
     $scope.search = function() {
-        console.log('hello');
         Search.repositories($scope.input)
         .then(function(response) {
             $scope.results = response;
-            console.log($scope.results);
         })
     }
 
@@ -47,10 +47,8 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
     };
 
     $scope.addToPipeline = function(pipeline, repo) {
-        console.log(repo);
         Pipeline.add({id: pipeline, repo: repo})
         .then(function (response){
-            console.log('response from creation', response);
         });
     };
 

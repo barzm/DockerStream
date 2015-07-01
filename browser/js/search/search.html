@@ -9,7 +9,7 @@
 	<ul id='repo-list' ng-repeat='result in results'>
 		<li id='repo-item'>
 			<h3 class="repo-list-name">
-				<a href='{{ result.html_url }}'>{{ result.full_name }}</a>
+				<a href='{{ result.html_url }}' target="_blank">{{ result.full_name }}</a>
 				<span id='success-msg' ng-if='pipelineSelect'>
 					Added successfully <i class='fa fa-check-circle-o'></i>
 				</span>
