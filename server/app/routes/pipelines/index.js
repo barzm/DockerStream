@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var Pipeline = mongoose.model('Pipeline')
 var User = mongoose.model('User');
 var run = require('../../modules/dockerun');
-var uuid = require('node-uuid'); 
+var uuid = require('node-uuid');
 
 var ensureAuthenticated = function(req, res, next) {
 	if (req.isAuthenticated()) {
@@ -64,10 +64,11 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 			console.log('new pipe pushed',pipeline);
 			pipeline.save(function(err, updatedPipeline) {
 				console.log("NEW PIPE IN PUT ROUTE: \n",newPipe,"\n")
-				run.getRepository(newPipe.gitUrl,updatedPipeline._id)
-				.then(function(){
+				run.getRepository(newPipe.gitUrl,updatedPipeline._id,req.user.github.token)
+				.then(function(downloadPath){
+					console.log('DOWNLOAD PATH ', downloadPath);
 					console.log('get repo returned: ',newPipe.imageId,newPipe.gitUrl)
-					var targetDir = './containers/'+updatedPipeline._id; 
+					var targetDir = './downloads';
 					return run.buildImage(newPipe.imageId,targetDir,newPipe.gitUrl);
 				})
 				.then(function(){
