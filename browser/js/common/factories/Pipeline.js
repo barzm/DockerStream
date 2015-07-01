@@ -2,7 +2,6 @@ app.factory('Pipeline', function($http) {
 
 
 
-
 	function createPipeline (pName) {
 		return $http.post('/api/pipelines', {name: pName})
 		.then(function (response) {
@@ -17,6 +16,15 @@ app.factory('Pipeline', function($http) {
 		})
 	}
 
+	function getRepoByUrl (url) {
+		url = url.split('com/')[1].split('/');
+		var user = url[0], repo = url[1].split('.')[0];
+		return $http.get(`/api/pipelines?user=${user}&repo=${repo}`)
+		.then(function (response) {
+			return response.data;
+		})
+	}
+
 	function addToPipeline (info) {
 		return $http.put('api/pipelines', info)
 		.then(function(response) {
@@ -24,6 +32,7 @@ app.factory('Pipeline', function($http) {
 			return response.data;
 		})
 	}
+	
 
 	function updatePipelines (pipelines) {
 		return $http.put('/api/user', pipelines)
@@ -42,6 +51,7 @@ app.factory('Pipeline', function($http) {
 	return {
 		create: createPipeline,
 		get: getPipelines,
+		getByUrl: getRepoByUrl,
 		add: addToPipeline,
 		update: updatePipelines,
 		delete: deletePipeline
