@@ -33,10 +33,9 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams)
 			return Pipeline.add({id: pipelineId, repo: response})
 		})
 		.then(function (response) {
-			console.log('hitting response');
-			// $scope.getPipelines();
+			$scope.getPipelines();
 		}, function (err){
-			console.log('hitting err');
+                console.log('Error in recieving pipelines: ',err);
 		})
 	};
 
