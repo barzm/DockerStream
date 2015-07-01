@@ -13,13 +13,14 @@ class Pipe {
 		this.prev;
 		this.id = uuid.v4();
 		this.imgName = imgName;
+		this.targetDirectory = targetDirectory;
 	}
 
 	runPipe() {
-		console.log("BUILD AND RUN DOCKER"); 
+		console.log("BUILD AND RUN DOCKER", this.targetDirectory);
 		var self = this;
 
-		return exec('sudo docker run --name ' + self.id + ' -v ' + '/vagrant'+volumeDir + '/data:/data ' + self.imgName)
+		return exec('sudo docker run --name ' + self.id + ' -v ' + '/vagrant'+this.targetDirectory + '/data:/data ' + self.imgName)
 		.catch(function(err) {
 			console.error(err.message, err.stack.split('\n'));
 		});
