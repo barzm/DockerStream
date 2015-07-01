@@ -10,6 +10,7 @@ var uuid = require('node-uuid');
 var request = require('request-promise');
 
 
+
 var ensureAuthenticated = function(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
@@ -69,31 +70,33 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
 	Pipeline.findById(req.body.id)
-	.exec()
-	.then(function(pipeline) {
-		console.log("adding pipe to pipeline")
-		var newPipe = {
-			name: req.body.repo.name,
-			gitUrl: req.body.repo.html_url,
-			description: req.body.repo.description,
-			order: pipeline.pipeline.length,
-			imageId: uuid.v4()
-		};
-		pipeline.pipeline.push(newPipe);
-		console.log('new pipe pushed',pipeline);
-		pipeline.save(function(err, updatedPipeline) {
-			console.log("NEW PIPE IN PUT ROUTE: \n",newPipe,"\n")
-			run.getRepository(newPipe.gitUrl,updatedPipeline._id)
-			.then(function(){
-				console.log('get repo returned: ',newPipe.imageId,newPipe.gitUrl)
-				var targetDir = './containers/'+updatedPipeline._id; 
-				return run.buildImage(newPipe.imageId,targetDir,newPipe.gitUrl);
-			})
-			.then(function(){
-				res.json(updatedPipeline);
-			})
-			.catch(function(err){
-				console.log("ERROR in router put",err.message,err.stack.split('\n'));
+		.exec()
+		.then(function(pipeline) {
+			console.log("adding pipe to pipeline")
+			var newPipe = {
+				name: req.body.repo.name,
+				gitUrl: req.body.repo.html_url,
+				description: req.body.repo.description,
+				order: pipeline.pipeline.length,
+				imageId: uuid.v4()
+			};
+			pipeline.pipeline.push(newPipe);
+			console.log('new pipe pushed',pipeline);
+			pipeline.save(function(err, updatedPipeline) {
+				console.log("NEW PIPE IN PUT ROUTE: \n",newPipe,"\n")
+				run.getRepository(newPipe.gitUrl,updatedPipeline._id,req.user.github.token)
+				.then(function(downloadPath){
+					console.log('DOWNLOAD PATH ', downloadPath);
+					console.log('get repo returned: ',newPipe.imageId,newPipe.gitUrl)
+					var targetDir = './downloads';
+					return run.buildImage(newPipe.imageId,targetDir,newPipe.gitUrl);
+				})
+				.then(function(){
+					res.json(updatedPipeline);
+				})
+				.catch(function(err){
+					console.log("ERROR in router put",err.message,err.stack.split('\n'));
+				})
 			})
 		})
 	})
@@ -123,5 +126,9 @@ router.post('/', ensureAuthenticated, function(req, res) {
 				res.json(user);
 			})
 		})
+<<<<<<< HEAD
 	})
 });
+=======
+});
+>>>>>>> master

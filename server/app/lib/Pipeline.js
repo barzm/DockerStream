@@ -16,14 +16,6 @@ class Pipeline {
         // this.buildPipeline(pipeArray);
     }
 
-    addPipe(gitUrl) { //add to mongo pipeline
-
-    }
-
-    getPipeline() {
-        return this.pipes;
-    }
-
     generateId() {
         var self = this;
         this.uuid = uuid.v4();
@@ -31,7 +23,7 @@ class Pipeline {
         console.log("TARGET", this.targetDir)
         return exec('mkdir ' + self.targetDir)
             .then(function () {
-                console.log("MAKING data folder")
+                console.log("MAKING data folder",self.targetDir)
                 return exec('mkdir ' + self.targetDir + '/data')
             })
             .catch(function (err) {
@@ -41,9 +33,9 @@ class Pipeline {
     }
 
     buildPipeline() {
+      console.log("\n=========BUILDING PIPELINE=========\n");
         var self = this;
-        return self.generateId()
-            .then(function () {
+
                 // console.log("PIPELINE IN BUILD",self.pipeArray)
                 var pipeline = self.pipeArray.sort(function (a, b) {
                     if (a.order > b.order) return 1
@@ -63,28 +55,22 @@ class Pipeline {
                     }
                 }
                 var cur = self.head;
-                while (cur) {
-                    console.log(cur.repo, "--->");
-                    cur = cur.next;
-                }
                 return self
-            });
+
     }
 
     runPipeline() {
+      console.log("\n=========RUNNNING PIPELINE========\n")
         var self = this;
-
         function executePipe(pipe) {
-            pipe.runPipe().then(function () {
-                console.log("about to exeecute pipe");
-                console.log('NEXT PIPE', pipe.next);
+            return pipe.runPipe().then(function () {
                 if (pipe.next){
-                	console.log('EXECUTING PIPE>NEXT');
-                    executePipe(pipe.next);
+                	console.log('\nEXECUTING PIPE>NEXT\n');
+                    return executePipe(pipe.next);
                 }
                 else {
                     console.log('end of pipeline');
-                    console.log('END TARGET DIR ', self.targetDir);
+                    console.log('\nTHIS PATH SHOULD BE RETURNED TO THE ROUTE',self.targetDir+'/data/output.json\n')
                     return self.targetDir + '/data/output.json';
                 }
             }).catch(function (err) {
