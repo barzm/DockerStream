@@ -23,7 +23,7 @@ module.exports = {
 	makeContainerDir:makeContainerDir
 }
 
-function run(pipelineId, cb) {
+function run(pipelineId, cb,githubToken) {
 	return PipelineModel.findById(pipelineId)
 			// console.log("FOUND PIPELINE ", p);
 			// var pipeline = new Pipeline(p.pipeline);
@@ -40,7 +40,7 @@ function run(pipelineId, cb) {
 		.then(function(pipeline) {
 			return pipeline.runPipeline();
 		})
-		.then(function() {
+		.then(function(path) {
 			console.log("PATH in run module!!!!!!!! ", path);
 			return path
 		})
@@ -49,14 +49,12 @@ function run(pipelineId, cb) {
 		})
 }
 
-function getRepository(gitUrl, pipelineId) {
+function getRepository(gitUrl, pipelineId,githubToken) {
 	console.log("IN get repo");
-	var targetDirectory = './containers/' + pipelineId;
+	var targetDirectory = './downloads/';
 	var username = username = gitUrl.split('/')[3];
 	var repo = gitUrl.split('/')[4];
 	return new Promise(function(resolve, reject) {
-		console.log("GITHUB KEY", env.GITHUBKEY);
-		var githubToken = env.GITHUBKEY;
 		console.log('downloading repository');
 
 		var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
@@ -70,7 +68,9 @@ function getRepository(gitUrl, pipelineId) {
 		fileStream.on('finish', function() {
 			console.log("FILESTREAM write finished");
 			// buildImage(targetDirectory, username, gitUrl).then(resolve);
-			resolve();
+			findDockerDir(username,repo,'./downloads').then(function(dir){
+				resolve(dir);
+			});
 		});
 		fileStream.on('error', reject);
 	});
@@ -81,17 +81,17 @@ function makeContainerDir(pipelineId) {
 	console.log("IN makeContainerDir");
 	var targetDirectory = './containers/' + pipelineId;
 	return exec('mkdir ' + targetDirectory)
-	.then(function(){
-		console.log("MADE CONTAINER DIRECTORY");
-		return exec('mkdir '+targetDirectory+'/data')
-
-	})
 	.catch(function(err){
 		console.log('Error in makeContainerDir',err,err.stack.split('\n'));
 	})
 
 }
-
+function deleteContainerDir(pipelineid){
+	return exec('rm -rf ./containers/'+pipelineId)
+	.catch(function(err){
+		console.log("Error deleting container directory",err.message,err.stack.split('\n'));
+	})
+}
 function buildImage(imgName, targetDirectory,gitUrl) {
 
 	console.log("Building Docker Image");
