@@ -15,13 +15,10 @@ var createApplication = function () {
 };
 
 var startServer = function () {
-
     var PORT = process.env.PORT || 1337;
-
     server.listen(PORT, function () {
         console.log(chalk.blue('Server started on port', chalk.magenta(PORT)));
     });
-
 };
 
 startDb.then(createApplication).then(startServer).catch(function (err) {
