@@ -124,6 +124,7 @@ function buildImage(imgName, targetDirectory, gitUrl) {
         })
         .fail(function(err) {
           console.log("ERR FAIL", err);
+          return err
         })
 
     }).catch(function(err) {
