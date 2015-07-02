@@ -11,12 +11,12 @@ app.config(function($stateProvider) {
 app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User, $stateParams) {
     $scope.input = null;
     $scope.results = null;
-    $scope.pipelineSelect = null;
+    $scope.selectedPipeline = null;
     $scope.userPipelines = null;
+    $scope.validRepo = null;
 
     AuthService.getLoggedInUser().then(function(user) {
         $scope.user = user;
-        console.log($stateParams);
         if (!$stateParams.input)
             $scope.getMyRepos();
         else 
@@ -47,8 +47,13 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
     };
 
     $scope.addToPipeline = function(pipeline, repo) {
+        $scope.selectedPipeline = repo.full_name;
         Pipeline.add({id: pipeline, repo: repo})
         .then(function (response){
+            $scope.validRepo = true;
+        }, function(err) {
+            $scope.validRepo = false;
+            console.log('response from error', err)
         });
     };
 
