@@ -1,18 +1,32 @@
-<section id="search">
+<!-- <section id="search">
 	<form class='form' ng-submit='search()'></form>
 		<input type="text" ng-model='input' ng-enter='search()' placeholder="Search for a repository">
 		<button type='button' ng-click='search()' class='btn btn-primary'>Search Github</button>
 	</form>
-</section>
+</section> -->
+<div class="container">
+<div class='container col-md-8 col-md-9 col-md-12'>
+		<div layout='row'>
+			<md-input-container id='new-name-input'>
+				<label>Search Github</label>
+				<input ng-enter='search()'ng-model='input'></input>
+			</md-input-container>
+			<md-button class='md-primary create-btn' ng-click='createPipeline()'>Search</md-button>
+		</div>
+	</div>
 
 <div id='search-results'>
 	<ul id='repo-list' ng-repeat='result in results'>
 		<li id='repo-item'>
 			<h3 class="repo-list-name">
 				<a href='{{ result.html_url }}' target="_blank">{{ result.full_name }}</a>
-				<span id='success-msg' ng-if='pipelineSelect'>
+				<span id='success-msg' ng-if='result.full_name === selectedPipeline && validRepo'>
 					Added successfully <i class='fa fa-check-circle-o'></i>
 				</span>
+				<span id='failure-msg' ng-if='result.full_name === selectedPipeline && !validRepo'>
+					No Dockerfile found <i class='fa fa-times'></i>
+				</span>
+
 				<md-select id='plus-menu' ng-model="pipelineSelect" placeholder="Add to Pipeline">
 
 				<md-option ng-repeat="pipeline in userPipelines" value="{{pipeline.name}}" ng-click="addToPipeline(pipeline._id, result)">
@@ -28,4 +42,5 @@
 
 	</li>
 </ul>
+</div>
 </div>

@@ -26,10 +26,26 @@ app.factory('Pipeline', function($http) {
 	}
 
 	function addToPipeline (info) {
-		return $http.put('api/pipelines', info)
+		var url = `${info.repo.url}/contents/`
+		return $http.get(`/api/pipelines/validate/?url=${url}`)
 		.then(function(response) {
-			console.log('from adding', response.data)
-			return response.data;
+			var files = response.data;
+			return files.some(function(file) {
+				return file.name === 'Dockerfile'
+			})
+
+		})
+		.then(function(shouldAdd) {
+			if (shouldAdd) {
+				return $http.put('api/pipelines', info)
+				.then(function(response) {
+					console.log('from adding', response.data)
+					return response.data;
+				})
+			} else {
+				throw new Error('No Dockerfile found')
+			}
+
 		})
 	}
 	
