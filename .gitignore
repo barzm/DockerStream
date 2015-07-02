@@ -4,6 +4,6 @@ npm-debug.log
 public
 .DS_Store
 coverage
-.vagrant
+.vagrant/
 containers/*
 downloads
