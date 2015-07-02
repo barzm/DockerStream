@@ -123,7 +123,7 @@ router.post('/', ensureAuthenticated, function(req, res) {
 		})
 		.then(function(pipeline) {
 			pipelineId = pipeline._id;
-			return run.makeContainerDir(pipeline._id)
+			return pipeline
 		})
 		.then(function() {
 			return User.findById(req.user._id)

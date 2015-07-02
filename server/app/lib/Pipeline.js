@@ -16,18 +16,17 @@ class Pipeline {
         // this.buildPipeline(pipeArray);
     }
 
-    generateId() {
+    makeContainerDir() {
         var self = this;
-        this.uuid = uuid.v4();
-        this.targetDir = './containers/' + this.uuid;
+        console.log("\n=========MAKING FOLDER=========\n");
         console.log("TARGET", this.targetDir)
-        return exec('mkdir ' + self.targetDir)
+        return exec('mkdir ../../..' + self.targetDir)
             .then(function () {
                 console.log("MAKING data folder",self.targetDir)
-                return exec('mkdir ' + self.targetDir + '/data')
+                return exec('mkdir ../../..' + self.targetDir + '/test')
             })
             .catch(function (err) {
-                console.log("ERROR IN generateId", err.stack)
+                console.log("ERROR IN make container", err.stack)
             })
 
     }
@@ -37,25 +36,28 @@ class Pipeline {
         var self = this;
 
                 // console.log("PIPELINE IN BUILD",self.pipeArray)
-                var pipeline = self.pipeArray.sort(function (a, b) {
-                    if (a.order > b.order) return 1
-                    if (a.order < b.order) return -1
-                    return 0
-                });
-                var l = pipeline.length
-                for (var i = 0; i < l; i++) {
-                    var newPipe = new Pipe(pipeline[i].imageId, self.targetDir);
-                    if (typeof self.head === 'undefined') {
-                        self.head = newPipe;
-                        self.tail = self.head;
-                    } else {
-                        self.tail.next = newPipe;
-                        newPipe.prev = self.tail;
-                        self.tail = newPipe;
-                    }
-                }
-                var cur = self.head;
-                return self
+                return this.makeContainerDir()
+                .then(function(){
+                  var pipeline = self.pipeArray.sort(function (a, b) {
+                      if (a.order > b.order) return 1
+                      if (a.order < b.order) return -1
+                      return 0
+                  });
+                  var l = pipeline.length
+                  for (var i = 0; i < l; i++) {
+                      var newPipe = new Pipe(pipeline[i].imageId, self.targetDir);
+                      if (typeof self.head === 'undefined') {
+                          self.head = newPipe;
+                          self.tail = self.head;
+                      } else {
+                          self.tail.next = newPipe;
+                          newPipe.prev = self.tail;
+                          self.tail = newPipe;
+                      }
+                  }
+                  var cur = self.head;
+                  return self
+                })
 
     }
 
