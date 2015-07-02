@@ -106,7 +106,6 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 					})
 					.then(function() {
 							res.json(updatedPipeline);
-						}
 					})
 					.catch(function(err) {
 						console.log("ERROR in router put", err.message, err.stack.split('\n'));
