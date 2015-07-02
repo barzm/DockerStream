@@ -20,7 +20,12 @@ class Pipe {
 		console.log("BUILD AND RUN DOCKER", this.targetDirectory);
 		var self = this;
 
-		return exec('sudo docker run --name ' + self.id + ' -v ' + '/vagrant'+this.targetDirectory + '/data:/data ' + self.imgName)
+		return exec('sudo docker run --name ' + self.id + ' -v ' + __dirname +'/'+ this.targetDirectory + '/data:/data ' + self.imgName)
+		.then(function(result){
+			console.log("STDOUT ", result.stdout);
+			console.log("STDERR ", result.stderr);
+			return result;
+		})
 		.catch(function(err) {
 			console.error(err.message, err.stack.split('\n'));
 		});
