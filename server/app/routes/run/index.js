@@ -16,7 +16,9 @@ router.get('/',function(req,res,next){
 		var read = fs.createReadStream(path.slice(1));
 		if(req.query.callback){
 			console.log("CALLBACK URL EXISTS");
-			read.pipe(request.post(req.query.callback))
+			console.log("THIS IS THE CALLBACK URL ",req.query.callback)
+			request.post({url: req.query.callback,form:{key:'hello'}})
+			//read.pipe(request.post(req.query.callback))
 		}else{
 			console.log("NO CALLBACK URL, STREAMING TO RES");
 			read.pipe(res);
