@@ -8,6 +8,7 @@ router.use('/run',require('./run'));
 router.use('/search', require('./search'));
 router.use('/user', require('./user'));
 router.use('/pipelines', require('./pipelines'));
+router.use('/test',require('./test'));
 
 router.use(function (req, res) {
     res.status(404).end();
