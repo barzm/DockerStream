@@ -12,8 +12,9 @@ router.get('/',function(req,res,next){
 	run.run(req.query.id,req.query.callback)
 	.then(function(path){
 		console.log("\n=========ROUTE PROMISE RESOLVED=========\n")
+		console.log('\n\n\nTHIS IS THE DIRECTORY IN THE RUN ROUTE: ',__dirname);
 		console.log("THIS IS THE PATH AQUI", path);
-		var read = fs.createReadStream(path.slice(1));
+		var read = fs.createReadStream('../../'+path.slice(1));
 		if(req.query.callback){
 			console.log("CALLBACK URL EXISTS");
 			console.log("THIS IS THE CALLBACK URL ",req.query.callback)
