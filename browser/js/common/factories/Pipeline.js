@@ -39,7 +39,6 @@ app.factory('Pipeline', function($http) {
 			if (shouldAdd) {
 				return $http.put('api/pipelines', info)
 				.then(function(response) {
-					console.log('from adding', response.data)
 					return response.data;
 				})
 			} else {
@@ -49,8 +48,8 @@ app.factory('Pipeline', function($http) {
 		})
 	}
 	
-	function updatePipelines (pipelines) {
-		return $http.put('/api/user', pipelines)
+	function updatePipelines (pipelines, image) {
+		return $http.put('api/user', {image: image, pipelines: pipelines})
 		.then(function (response) {
 			return response.data;
 		})

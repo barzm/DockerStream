@@ -19,18 +19,19 @@ router.get('/', function (req, res, next) {
 })
 
 router.put('/', function (req, res, next) {
+	var updatedPipeline = req.body.pipelines;
+	var deletedImageId = req.body.image;
 	var pipelines = [];
 	var newPipelines = [];
 	var counter = 0;
-	var len = Object.keys(req.body).length
+	var len = Object.keys(updatedPipeline).length
 	var newPipeline;
-	for (var pipelineObj in req.body) {
-		newPipeline = req.body[pipelineObj]['pipeline'];
+	for (var pipelineObj in updatedPipeline) {
+		newPipeline = updatedPipeline[pipelineObj]['pipeline'];
 		newPipelines.push(newPipeline);
-		Pipeline.findById(req.body[pipelineObj].pipelineId)
+		Pipeline.findById(updatedPipeline[pipelineObj].pipelineId)
 		.exec()
 		.then(function (pipeline) {
-			console.log(newPipelines);
 			pipeline.pipeline = newPipelines.shift();
 			pipeline.save(function (err, savedPipeline) {
 				counter++;
