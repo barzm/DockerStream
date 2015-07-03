@@ -11,13 +11,13 @@ module.exports = {
 
 function deleteImage(pipelineId){
   var promises = [];
-  console.log("ABOUT TO DELETE IMAGES");
+  console.log("ABOUT TO DELETE IMAGES",pipelineId);
   return PipelineModel.findById(pipelineId)
   .exec()
   .then(function(pipeline){
     console.log("PIPELINE",pipeline.pipeline);
     pipeline.pipeline.forEach(function(pipe){
-      console.log("about to delete image:",image);
+      console.log("about to delete image:",pipe.imageId);
       promises.push(exec('sudo docker rmi -f ' + pipe.imageId));
     })
     console.log("about to return all promises");

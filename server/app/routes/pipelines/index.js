@@ -10,6 +10,7 @@ var uuid = require('node-uuid');
 var request = require('request-promise');
 var Promise = require('bluebird');
 Promise.promisifyAll(mongoose);
+var cleanup = require('../../modules/dockercleanup');
 
 
 var ensureAuthenticated = function(req, res, next) {
@@ -38,12 +39,15 @@ router.get('/validate/?', ensureAuthenticated, function(req, res, next) {
 
 
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
-	Pipeline.findByIdAndRemove(req.params.id)
-		.exec()
-		.then(function() {
-			return User.findById(req.user._id)
-				.exec()
-		})
+	cleanup.deleteImage(req.params.id)
+	.then(function(){
+		return Pipeline.findByIdAndRemove(req.params.id)
+			.exec()
+			.then(function() {
+				return User.findById(req.user._id)
+					.exec()
+			})
+	})
 		.then(function(user) {
 			user.pipelines = user.pipelines.filter(function(id) {
 				return id.toString() !== req.params.id;
@@ -57,7 +61,7 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 				})
 		})
 		.then(null, function(err) {
-			console.log('Error in deletion route.');
+			console.log('Error in deletion route.',err.message,err.stack.split('\n'));
 			res.json(err);
 		})
 })
