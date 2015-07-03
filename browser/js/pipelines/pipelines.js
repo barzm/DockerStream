@@ -17,6 +17,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.saved = 'untouched';
     $scope.alert = '';
     $scope.showConfirm = renderConfirmation;
+    console.log($scope.showConfirm);
 
     $scope.search = function(input) {
         $state.go('search', {
@@ -33,9 +34,10 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
                 })
             })
             .then(function(response) {
-                $scope.getPipelines();
-            }, function(err) {
-                console.log('Error in recieving pipelines: ', err);
+                return $scope.getPipelines();
+            })
+            .catch(function(err) {
+                console.log(`Error in retrieving repository: $(err)`);
             })
     };
 
@@ -65,7 +67,10 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             })
     };
 
-    $scope.updatePipelines = function() {
+    $scope.updatePipelines = function(deleted) {
+        if (deleted) {
+            $scope.models.list.deletedImageId = deleted.imageId;
+        }
         Pipeline.update($scope.models.list)
             .then(function(response) {
                 $scope.saved = 'saved';
@@ -73,19 +78,20 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.reorder = function() {
-        for (var pipelineObj in $scope.models.list) {
-            $scope.models.list[pipelineObj].pipeline
-                .map(function(repo, ix) {
+        Object.keys($scope.models.list).forEach(function (key) {
+            $scope.models.list[key].pipeline.map(function(repo, ix) {
                     repo.order = ix;
                 })
-        }
+        })  
         $scope.saved = 'unsaved';
     };
 
     $scope.deleteRepo = function(pipeline, ix) {
-        $scope.models.list[pipeline.name].pipeline.splice(ix, 1);
+        var deleted = $scope.models.list[pipeline.name].pipeline.splice(ix, 1)[0][0];
+        console.log(deleted);
         $scope.reorder();
-        $scope.updatePipelines();
+        console.log('here we go!');
+        $scope.updatePipelines(deleted);
     };
 
     $scope.deletePipeline = function(pipeline) {
@@ -107,7 +113,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         return obj;
     };
 
-    var renderConfirmation = function(ev) {
+    var renderConfirmation = function (ev) {
         console.log('EVENT', ev);
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
@@ -118,13 +124,12 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             .cancel('CANCEL')
             .targetEvent(ev);
         $mdDialog.show(confirm).then(function() {
-          $scope.alert = 'You decided to get rid of your debt.';
+            $scope.alert = 'You decided to get rid of your debt.';
         }, function() {
-          $scope.alert = '';
+            $scope.alert = '';
         });
     };
 
     $scope.getPipelines();
-
 
 });

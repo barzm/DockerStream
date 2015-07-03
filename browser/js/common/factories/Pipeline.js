@@ -49,7 +49,6 @@ app.factory('Pipeline', function($http) {
 		})
 	}
 	
-
 	function updatePipelines (pipelines) {
 		return $http.put('/api/user', pipelines)
 		.then(function (response) {
