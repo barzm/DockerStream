@@ -41,7 +41,6 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 	Pipeline.findByIdAndRemove(req.params.id)
 		.exec()
 		.then(function() {
-			console.log('hello i am in here');
 			return User.findById(req.user._id)
 				.exec()
 		})
@@ -52,11 +51,9 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 			return user;
 		})
 		.then(function(user) {
-			return user.saveAsync
-				.then(function(a, b) {
-					console.log('USER SAVED')
-					console.log('parama1,', a);
-					console.log('param2', b);
+			return user.saveAsync()
+				.then(function(user) {
+					res.json(user);
 				})
 		})
 		.then(null, function(err) {
