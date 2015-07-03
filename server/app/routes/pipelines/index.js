@@ -8,7 +8,8 @@ var User = mongoose.model('User');
 var run = require('../../modules/dockerun');
 var uuid = require('node-uuid');
 var request = require('request-promise');
-
+var Promise = require('bluebird');
+Promise.promisifyAll(mongoose);
 
 
 var ensureAuthenticated = function(req, res, next) {
@@ -39,20 +40,28 @@ router.get('/validate/?', ensureAuthenticated, function(req, res, next) {
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 	Pipeline.findByIdAndRemove(req.params.id)
 		.exec()
-		.then(function(removed) {
+		.then(function() {
+			console.log('hello i am in here');
 			return User.findById(req.user._id)
 				.exec()
-				.then(function(user) {
-					user.pipelines = user.pipelines.filter(function(id) {
-						return id.toString() !== req.params.id;
-					})
-					user.save(function(err, user) {
-
-					})
+		})
+		.then(function(user) {
+			user.pipelines = user.pipelines.filter(function(id) {
+				return id.toString() !== req.params.id;
+			})
+			return user;
+		})
+		.then(function(user) {
+			return user.saveAsync
+				.then(function(a, b) {
+					console.log('USER SAVED')
+					console.log('parama1,', a);
+					console.log('param2', b);
 				})
-				.then(function(user) {
-					res.json(user);
-				})
+		})
+		.then(null, function(err) {
+			console.log('Error in deletion route.');
+			res.json(err);
 		})
 })
 
@@ -105,7 +114,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
 					})
 					.then(function() {
-							res.json(updatedPipeline);
+						res.json(updatedPipeline);
 					})
 					.catch(function(err) {
 						console.log("ERROR in router put", err.message, err.stack.split('\n'));

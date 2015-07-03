@@ -3,11 +3,14 @@
         <div class="navbar-header">
             <fullstack-logo></fullstack-logo>
         </div>
-        <ul class="nav navbar-nav">
-            <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
-                <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
-            </li>
-        </ul>
+        <div class='nav-container'>
+            <ul class="nav navbar-nav">
+                <li class='item{{$index}}' ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
+                    <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
+                </li>
+                <hr />
+            </ul>
+        </div>
         <button ng-show="!user" id='login-button' class="btn btn-primary" ng-click="gitLogin()">
 Login with <i class="fa fa-github github-login"></i></button>
         <div ng-show="user" class="welcome">

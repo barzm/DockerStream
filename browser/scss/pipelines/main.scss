@@ -53,7 +53,7 @@ div {
 	#clippy {
 		padding: 0px 8px;
 		border: 1px solid #CCCCCC;
-		background: white;
+		background: $backgroundWhite;
 		border-radius: 3px;
 	}
 	
@@ -136,7 +136,7 @@ div {
 
 
 #user-pipeline li {
-	background-color: #fff;
+	background-color: $backgroundWhite;
 	display: block;
 	padding: 10px 15px;
 	margin-bottom: -1px;

@@ -1,11 +1,15 @@
 .navbar {
-
+  margin-top: -50px;
+  color: white;
+  position: fixed;
+  width: 100%;
   display: block;
-  background: white;
+  background: $background;
   padding: none;
   margin: none;
   margin-bottom: 0px;
-  border-bottom: 1px solid $darkBlue;
+  border: none;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
   fullstack-logo {
     padding-top: 10px;
     margin-right: 20px;
@@ -13,23 +17,36 @@
   }
 
   a {
-    color: $darkBlue;
+    color: white;
     &:hover {
-      color: $darkBlue;
+      color: white;
     }
   }
-
+  .nav > li {
+    display: inline;
+    text-align: center;
+    padding-top: 3%;
+  }
   .nav > li > a {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 15px;
+    margin: 0;
+    text-decoration: none;
     cursor: pointer;
-    &.active {
-      color: darken($darkBlue, 10%);
-    }
     &:hover {
+      color: white;
       transition: color 0.2s;
+      background-color: transparent;
+    }
+    &.active {
+      display: true;
+      color: $blue;
+
     }
     &:focus {
-      color: darken($darkBlue, 20%);
       background: transparent;
+
     }
   }
 
@@ -42,24 +59,23 @@
     &:hover {
       color: white;
       background-color: $blue;
-
     }
     border-color: $blue;
-    color: $darkBlue;
+    color: white;
   }
 
   .welcome {
     float: right;
     margin-top: 12px;
     span {
-      color: $darkBlue;
     }
     a {
-      color: darken($darkBlue, 10%);
       cursor: pointer;
     }
   }
-
+  .nav-container {
+    width: 100%;
+  }
 }
 
 .github-login {
@@ -68,3 +84,42 @@
   top: 14px;
   right: 11.2%;
 }
+
+hr {
+  border: none;
+  height: .3rem;
+  width: 20%;
+  margin: 0 10px;
+  background: $blue;
+  transition: 0.3s ease-in-out;
+}
+.item0 ~ hr, .item1 ~ hr, .item2 ~ hr {
+  display: none;
+}
+.item0:hover ~ hr {
+  display: block;
+}
+
+// .item0.selected ~ hr {
+//   display: block;
+// }
+
+.item1:hover ~ hr {
+  margin-left: 36%;
+  display: block;
+}
+
+// .item1.selected ~ hr {
+//   display: block;
+//   margin-left: 36%;
+// }
+
+.item2:hover ~ hr {
+  margin-left: 70%;
+  display: block;
+}
+
+// .item2.selected ~ hr {
+//   display: block;
+//   margin-left: 70%;
+// }

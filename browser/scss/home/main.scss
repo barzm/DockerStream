@@ -1,5 +1,5 @@
 #home-div {
-	background-color: $blue;
+	background-color: darken($blue, 10%);
 	color: white;
 	height: 100vh;
 	width: 100%;
@@ -13,6 +13,7 @@
 		font-size: 2em;
 		background: transparent;
 		font-weight: lighter;
+		border: none;
 		i {
 			font-size: 1em;
 		}
@@ -64,9 +65,14 @@ h2#title-home {
 		}
 	}
 }
+#text-boxes {
+		font-size: 1.3em;
+		text-align: center;
+}
 
 #title-home {
 	color: darken(white, 7%);
+	// color: white;
 	padding-top: 0%;
 	font-size: 4.5em;
 	font-weight: 100;

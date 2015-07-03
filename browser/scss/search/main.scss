@@ -49,3 +49,17 @@
 	font-size: 16px;
 	overflow: auto;
 }
+
+#failure-msg {
+	color: #BA554C;
+	font-size: 16px;
+	overflow: auto;
+	.fa-times {
+		float: none;
+	}
+}
+
+#progress-circle {
+	float: right;
+	color: red;
+}
