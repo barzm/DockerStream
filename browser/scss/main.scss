@@ -13,9 +13,11 @@
 
 
 body {
+	padding-top: 50px;
 	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
 	font-family: sans-serif;
 	color: $darkBlue;
+	background-color: $backgroundWhite;
 	-webkit-font-smoothing: antialiased;
 }
 @import 'directives/main';
