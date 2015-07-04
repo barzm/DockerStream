@@ -42,8 +42,12 @@ router.put('/', function (req, res, next) {
 					if (counter === len) res.json(pipelines);
 				})
 			})
+			.then(null,function(err){
+				next(new Error("There was a problem deleting a pipe from your pipeline"));
+			})
 		}
 	})
-
-
+	.catch(function(err){
+		next(new Error("There was a problem deleting an image from the server: ", req.body.image).status(911)); 
+	}))
 })

@@ -36,7 +36,6 @@ app.get('/*', function (req, res) {
 // Error catching endware.
 app.use(function (err, req, res, next) {
     console.error(err, typeof next);
-    //Uncomment me for useful stack traces, bitches!
     console.log(err.stack);
     res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
