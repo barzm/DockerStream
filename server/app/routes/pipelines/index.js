@@ -104,10 +104,10 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 			.then(function(user) {
 				res.json(user);
 			})
-			.then(null, function(err)[
+			.then(null, function(err){
 				err.message= "There was a problem finding the user";
 				next(err);
-			])
+			})
 	}
 })
 
@@ -155,7 +155,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 })
 
 
-router.post('/', ensureAuthenticated, function(req, res) {
+router.post('/', ensureAuthenticated, function(req, res,next) {
 	var pipelineId;
 	Pipeline.create({
 			user: req.user._id,
