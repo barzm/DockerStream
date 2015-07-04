@@ -21,7 +21,7 @@ var ensureAuthenticated = function(req, res, next) {
 	}
 };
 
-router.get('/validate/?', ensureAuthenticated, function(req, res, next) {
+router.get('/validate', ensureAuthenticated, function(req, res, next) {
 	console.log(req.query);
 	request({
 			url: req.query.url,
@@ -36,8 +36,6 @@ router.get('/validate/?', ensureAuthenticated, function(req, res, next) {
 		.catch(next);
 })
 
-
-
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 	cleanup.deletePipelineImages(req.params.id)
 	.then(function(){
@@ -46,13 +44,29 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 			.then(function() {
 				return User.findById(req.user._id)
 					.exec()
+					// Throw error?
 			})
+			.then(null,function(err){
+				err.message= "There was a problem finding the User";
+				err.status= 911;
+				next(err);
+			})
+	})
+	.catch(function(err){
+		err.message = "There was a problem deleting the pipeline images";
+		err.status = 911;
+		next(err);
 	})
 		.then(function(user) {
 			user.pipelines = user.pipelines.filter(function(id) {
 				return id.toString() !== req.params.id;
 			})
 			return user;
+		})
+		.catch(function(err){
+			err.message = "There was a problem removing the pipeline from the user";
+			err.status= 911;
+			next(err);
 		})
 		.then(function(user) {
 			return user.saveAsync()
@@ -61,8 +75,9 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 				})
 		})
 		.then(null, function(err) {
-			console.log('Error in deletion route.',err.message,err.stack.split('\n'));
-			res.json(err);
+			err.message = "There was a problem saving the user";
+			err.status = 911;
+			next(err);
 		})
 })
 
@@ -78,7 +93,10 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 			.then(function(response) {
 				res.json(JSON.parse(response))
 			})
-			.catch(next);
+			.catch(function(err){
+				err.message = "There was a problem getting the user";
+				next(err);
+			});
 	} else {
 		User.findById(req.user._id)
 			.populate('pipelines')
@@ -86,10 +104,12 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 			.then(function(user) {
 				res.json(user);
 			})
-			.then(null, next)
+			.then(null, function(err){
+				err.message= "There was a problem finding the user";
+				next(err);
+			})
 	}
 })
-
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
 	Pipeline.findById(req.body.id)
@@ -114,18 +134,28 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 						var targetDir = './downloads';
 						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
 					})
+					.catch(function(err){
+						err.message = "There was a problem building the image";
+						err.status = 911;
+						next(err);
+					})
 					.then(function() {
 						res.json(updatedPipeline);
 					})
-					.catch(function(err) {
-						console.log("ERROR in router put", err.message, err.stack.split('\n'));
-					})
 			})
+			.then(null,function(err){
+				err.message = "There was  a problem saving the pipeline";
+				next(err);
+			})
+		})
+	.then(null,function(err){
+			err.message = "There was a problem finding the pipeline";
+			next(err);
 		})
 })
 
 
-router.post('/', ensureAuthenticated, function(req, res) {
+router.post('/', ensureAuthenticated, function(req, res,next) {
 	var pipelineId;
 	Pipeline.create({
 			user: req.user._id,
@@ -139,6 +169,10 @@ router.post('/', ensureAuthenticated, function(req, res) {
 			return User.findById(req.user._id)
 				.exec();
 		})
+		.then(null,function(err){
+			err.message = "There was a problem finding the User";
+			next(err);
+		})
 		.then(function(user) {
 			user.pipelines.unshift(pipelineId);
 			user.save(function(err, savedUser) {
@@ -149,5 +183,9 @@ router.post('/', ensureAuthenticated, function(req, res) {
 						res.json(user);
 					})
 			})
-		});
+		})
+		.then(null,function(err){
+			err.message = "There was a problem removing a pipe from the pipeline";
+			next(err);
+		})
 });
