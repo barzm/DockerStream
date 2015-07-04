@@ -39,7 +39,7 @@ router.get('/validate/?', ensureAuthenticated, function(req, res, next) {
 
 
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
-	cleanup.deleteImage(req.params.id)
+	cleanup.deletePipelineImages(req.params.id)
 	.then(function(){
 		return Pipeline.findByIdAndRemove(req.params.id)
 			.exec()
