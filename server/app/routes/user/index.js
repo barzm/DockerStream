@@ -43,11 +43,14 @@ router.put('/', function (req, res, next) {
 				})
 			})
 			.then(null,function(err){
-				next(new Error("There was a problem deleting a pipe from your pipeline"));
+				err.message = "There was a problem deleting a pipe from your pipeline";
+				next(err);
 			})
 		}
 	})
 	.catch(function(err){
-		next(new Error("There was a problem deleting an image from the server: ", req.body.image).status(911)); 
+		err.message ="There was a problem deleting a pipe from your pipeline";
+		err.status = 911;
+		next(err);
 	}))
 })

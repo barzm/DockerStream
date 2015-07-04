@@ -25,11 +25,18 @@ function deletePipelineImages(pipelineId){
     return Promise.all(promises);
   })
   .then(null,function(err){
-    console.log("ERROR deleting images",err.message,err.stack.split('\n'));
+    err.message = "There was a problem deleting pipe: ",pipelineId, " from the pipeline";
+    err.status = 911;
+    return err;
   })
 }
 
 function deleteImage(imageId){
   console.log("DELETING IMAGE", imageId)
   return exec('sudo docker rmi -f ' + imageId)
+  .then(null,function(err){
+    err.message = "There was a problem executing the delete image child process";
+    err.status = 911;
+    return err;
+  })
 }
