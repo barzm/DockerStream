@@ -23,8 +23,8 @@ class Pipe {
 
 		return exec('sudo docker run --name ' + self.id + ' -v ' + this.targetDirectory + '/ahab:/ahab ' + self.imgName)
 		.then(function(result){
-			console.log("STDOUT ", result.stdout);
-			console.log("STDERR ", result.stderr);
+			console.log("STDOUT ", result.stdout.split("\n"));
+			console.log("STDERR ", result.stderr.split("\n"));
 			return result;
 		})
 		.catch(function(err) {
