@@ -64,6 +64,7 @@ function getRepository(gitUrl, pipelineId, githubToken) {
   var targetDirectory = './downloads/';
   var username = username = gitUrl.split('/')[3];
   var repo = gitUrl.split('/')[4];
+  console.log("getRepository: ", username, repo); 
   return new Promise(function(resolve, reject) {
     var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
     var options = {
