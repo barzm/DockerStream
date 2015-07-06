@@ -38,26 +38,33 @@ function run(pipelineId, cb, githubToken) {
     .then(function(pipeline) {
       return pipeline.buildPipeline();
     })
+    .then(null,function(err){
+      err.message = "There was a problem building the pipeline";
+      return err;
+    })
     .then(function(pipeline) {
       return pipeline.runPipeline();
+    })
+    .then(null, function(err){
+      err.message = "There was a problem running the pipeline";
+      return err;
     })
     .then(function(path) {
       console.log("PATH in run module!!!!!!!! ", path);
       return path
     })
     .then(null, function(err) {
-      console.log("Error in run: ", err.message, err.stack.split('\n'));
+      err.message = "There was a problem in dockerun run";
+      err.status = 911;
+      return err;
     })
 }
 
 function getRepository(gitUrl, pipelineId, githubToken) {
-  console.log("IN get repo");
   var targetDirectory = './downloads/';
   var username = username = gitUrl.split('/')[3];
   var repo = gitUrl.split('/')[4];
   return new Promise(function(resolve, reject) {
-    console.log('downloading repository');
-
     var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
     var options = {
       url: `https://api.github.com/repos/${username}/${repo}/tarball?access_token=${githubToken}`,
@@ -67,10 +74,8 @@ function getRepository(gitUrl, pipelineId, githubToken) {
     };
     request.get(options).pipe(fileStream);
     fileStream.on('finish', function() {
-      console.log("FILESTREAM write finished");
-      // buildImage(targetDirectory, username, gitUrl).then(resolve);
       findDockerDir(username, repo, './downloads').then(function(dir) {
-        resolve(dir);
+        return resolve(dir);
       });
     });
     fileStream.on('error', reject);
@@ -83,37 +88,32 @@ function makeContainerDir(pipelineId) {
   var targetDirectory = './containers/' + pipelineId;
   return exec('mkdir ' + targetDirectory)
     .catch(function(err) {
-      console.log('Error in makeContainerDir', err, err.stack.split('\n'));
+      err.message = "There was a problem making the container directory";
+      err.status = 911;
+      return err;
     })
-
 }
 
 function deleteContainerDir(pipelineid) {
   return exec('rm -rf ./containers/' + pipelineId)
     .catch(function(err) {
-      console.log("Error deleting container directory", err.message, err.stack.split('\n'));
+      err.message = "There was a problem deleting the container directory";
+      err.status = 911;
+      return err;
     })
 }
 
 function buildImage(imgName, targetDirectory, gitUrl) {
 
-  console.log("Building Docker Image");
-  console.log("PASSED GITURL ", gitUrl);
-
   var username = gitUrl.split('/')[3];
   var repo = gitUrl.split('/')[4];
   var extractPromised = Promise.promisify(tar.extractTarball);
-  console.log("BUILD IMAGE USERNAME ", username);
-  console.log("BUILD IMAGE REPO ", repo);
 
   return extractPromised(`${targetDirectory}/${username}-${repo}.tar.gz`, targetDirectory)
     .then(function() {
-      console.log('extraction hit');
       return findDockerDir(username, repo, targetDirectory);
     }).then(function(dir) {
-      console.log("ABOUT TO BUILD IMAGE", 'cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
-        // return exec(`cd ${targetDirectory}/${dir}; sudo docker build -t ${imgName} .; sudo docker run --name ${id} -v /vagrant ${volumeDir} /data:/data ${imgName}`);
-      return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
+      return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
         .then(function(result) {
           console.log('STDOUT', result.stdout);
           console.log('STDERR', result.stderr);
@@ -123,23 +123,26 @@ function buildImage(imgName, targetDirectory, gitUrl) {
           return
         })
         .fail(function(err) {
+          err.message = "There was a problem building the image";
           console.log("ERR FAIL", err);
           return err
         })
 
     }).catch(function(err) {
-      console.error(err.message, err.stack.split('\n'));
+      err.message = "There was a problem extracting the tarball";
+      return err;
     });
-
 }
 
 function findDockerDir(username, repo, targetDirectory) {
-
   return fs.readdirAsync(targetDirectory)
     .then(function(files) {
       let test = new RegExp(username + '-' + repo + '-.');
       let matchedFile = files.filter(file => test.test(file))[0];
       return matchedFile;
     })
-
+    .catch(function(err){
+      err.message = "There was a problem reading the directory contents";
+      return err;
+    })
 }
