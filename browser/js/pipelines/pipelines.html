@@ -21,7 +21,7 @@
 			</span>
 		</span>
 		<span id='manage-btns'>
-			<md-button class='md-raised' ng-click='deletePipeline(pipeline)'>Delete</md-button>
+			<md-button class='md-raised' ng-click='showConfirmPipeline($event, pipeline)'>Delete</md-button>
 			<md-button class='md-raised' ng-disabled="saved == 'untouched'" ng-class="{'md-primary': saved === 'unsaved'}" ng-click='updatePipelines()'>Save</md-button>
 		</span>
 	</h2>
@@ -33,15 +33,15 @@
 	<md-input-container id='new-name-input'>
 	<label>
 		Add by URL
-		<span id='success-msg' ng-if='urlState === "valid"'>
+		<span id='success-msg' ng-if='urlState === "valid" && pipelineId === pipeline.pipelineId'>
 			Added Successfully <i class='fa fa-check-circle-o'></i>
 		</span>
-		<span id='failure-msg' ng-if='urlState === "invalid"'>
+		<span id='failure-msg' ng-if='urlState === "invalid" && pipelineId === pipeline.pipelineId'>
 			No Dockerfile found <i class='fa fa-times'></i>
 		</span>
-		<md-progress-circular id='progress-circle' ng-if='urlState === "pending"' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+		<md-progress-circular id='progress-circle' ng-if='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 	</label>
-	<input type='url' name='url' ng-enter='searchUrl &&getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
+	<input type='url' name='url' ng-enter='searchUrl && getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
 </md-input-container>
 </section>
 <ul id='user-pipeline'  dnd-list='pipeline.pipeline'>
