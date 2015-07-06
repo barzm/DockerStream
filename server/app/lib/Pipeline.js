@@ -72,8 +72,8 @@ class Pipeline {
                 }
                 else {
                     console.log('end of pipeline');
-                    console.log('\nTHIS PATH SHOULD BE RETURNED TO THE ROUTE',self.targetDir+'/data/output.json\n')
-                    return self.targetDir + '/data/output.json';
+                    console.log('\nTHIS PATH SHOULD BE RETURNED TO THE ROUTE',self.targetDir+'/ahab/output.json\n')
+                    return self.targetDir + '/ahab/output.json';
                 }
             }).catch(function (err) {
                 console.log("Error in pipeline: ", err);

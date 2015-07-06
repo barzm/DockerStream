@@ -11,6 +11,7 @@ var request = require('request-promise');
 var Promise = require('bluebird');
 Promise.promisifyAll(mongoose);
 var cleanup = require('../../modules/dockercleanup');
+var chalk = require('chalk');
 
 
 var ensureAuthenticated = function(req, res, next) {
@@ -52,7 +53,7 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 				next(err);
 			})
 	})
-	.catch(function(err){
+	.then(null,function(err){
 		err.message = "There was a problem deleting the pipeline images";
 		err.status = 911;
 		next(err);
@@ -63,7 +64,7 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 			})
 			return user;
 		})
-		.catch(function(err){
+		.then(null,function(err){
 			err.message = "There was a problem removing the pipeline from the user";
 			err.status= 911;
 			next(err);
@@ -112,6 +113,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 })
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
+	console.log("FIND BY ID",req.body.id);
 	Pipeline.findById(req.body.id)
 		.exec()
 		.then(function(pipeline) {
@@ -140,16 +142,12 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 						next(err);
 					})
 					.then(function() {
+						console.log(chalk.blue("sending updated pipeline"));
 						res.json(updatedPipeline);
 					})
 			})
-			.then(null,function(err){
-				err.message = "There was  a problem saving the pipeline";
-				next(err);
-			})
 		})
 	.then(null,function(err){
-			err.message = "There was a problem finding the pipeline";
 			next(err);
 		})
 })
