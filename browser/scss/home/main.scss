@@ -36,13 +36,14 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', end
 		}
 	}
 }
-#home {
 	#logo-img {
-		position: absolute;
-		right: 40%;
-		bottom: -10%;
+		// position: absolute;
+		// right: 40%;
+		// bottom: -10%;
+		margin-top: 5%;
 
 	}
+#home {
 	fullstack-logo {
 		padding-top: 30px;
 		width: 150px;
