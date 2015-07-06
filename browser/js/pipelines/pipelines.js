@@ -12,12 +12,11 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.pipelineName = null;
     $scope.created = false;
     $scope.searchInput = null;
+    $scope.searchUrl;
     $scope.models = {};
     $scope.loc = window.location.host;
     $scope.saved = 'untouched';
-    $scope.alert = '';
-    $scope.showConfirm = renderConfirmation;
-    console.log($scope.showConfirm);
+    $scope.urlState;
 
     $scope.search = function(input) {
         $state.go('search', {
@@ -26,6 +25,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.getRepoByUrl = function(url, pipelineId) {
+        $scope.urlState = 'pending';
         Pipeline.getByUrl(url)
             .then(function(response) {
                 return Pipeline.add({
@@ -34,10 +34,12 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
                 })
             })
             .then(function(response) {
+                $scope.searchUrl = '';
+                $scope.urlState = 'valid';
                 return $scope.getPipelines();
             })
             .catch(function(err) {
-                console.log(`Error in retrieving repository: $(err)`);
+                $scope.urlState = 'invalid';
             })
     };
 
@@ -75,11 +77,11 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.reorder = function() {
-        Object.keys($scope.models.list).forEach(function (key) {
+        Object.keys($scope.models.list).forEach(function(key) {
             $scope.models.list[key].pipeline.map(function(repo, ix) {
-                    repo.order = ix;
-                })
-        })  
+                repo.order = ix;
+            })
+        })
         $scope.saved = 'unsaved';
     };
 
@@ -108,20 +110,31 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         return obj;
     };
 
-    var renderConfirmation = function (ev) {
-        console.log('EVENT', ev);
+    $scope.showConfirm = function(ev, repo, pipeline, ix) {
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
-            .title('Are you sure you want to delete this repository?')
-            .content('This repository will be deleted, along with it\'s associated Docker image.')
+            .title(`Are you sure you want to delete ${repo.name}?`)
+            .content('This repository will be deleted, along with its associated Docker image.')
             .ariaLabel('Warning')
             .ok('DELETE')
             .cancel('CANCEL')
             .targetEvent(ev);
         $mdDialog.show(confirm).then(function() {
-            $scope.alert = 'You decided to get rid of your debt.';
-        }, function() {
-            $scope.alert = '';
+            $scope.deleteRepo(pipeline, ix);
+        });
+    };
+
+    $scope.showConfirmPipeline = function(ev, pipeline) {
+        var confirm = $mdDialog.confirm()
+            .parent(angular.element(document.body))
+            .title(`Are you sure you want to delete ${pipeline}?`)
+            .content('')
+            .ariaLabel('Warning')
+            .ok('DELETE')
+            .cancel('CANCEL')
+            .targetEvent(ev);
+        $mdDialog.show(confirm).then(function() {
+            $scope.deleteRepo(pipeline, ix);
         });
     };
 

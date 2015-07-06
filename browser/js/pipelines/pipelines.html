@@ -1,3 +1,4 @@
+<navbar></navbar>
 <div class="container">
 	<div class='container col-md-8 col-md-9 col-md-12'>
 		<div layout='row'>
@@ -30,24 +31,29 @@
 		<input ng-enter='search(searchInput)' ng-model='searchInput'></input>
 	</md-input-container>
 	<md-input-container id='new-name-input'>
-	<label>Add by URL</label>
-	<input ng-enter='getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
+	<label>
+		Add by URL
+		<span id='success-msg' ng-if='urlState === "valid"'>
+			Added Successfully <i class='fa fa-check-circle-o'></i>
+		</span>
+		<span id='failure-msg' ng-if='urlState === "invalid"'>
+			No Dockerfile found <i class='fa fa-times'></i>
+		</span>
+		<md-progress-circular id='progress-circle' ng-if='urlState === "pending"' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+	</label>
+	<input type='url' name='url' ng-enter='searchUrl &&getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
 </md-input-container>
 </section>
 <ul id='user-pipeline'  dnd-list='pipeline.pipeline'>
 	<li id='repo-box' ng-repeat="repo in pipeline.pipeline" dnd-draggable='repo' dnd-moved='pipeline.pipeline.splice($index, 1); reorder()' dnd-effect-allowed='move' dnd-selected='models.selected = repo' ng-class="{'selected': models.selected === repo}">
 		<ul id='pipeline-repo'>
-			<li><h3>{{ repo.name }}<i class='fa fa-times' ng-click='deleteRepo(pipeline, $index)'></i>
-			<md-button class="md-primary md-raised" ng-click="showConfirm($event)" flex flex-md="100">
-				Confirm Dialog
-			</md-button>
+			<li><h3>{{ repo.name }}<i class='fa fa-times' ng-click="showConfirm($event, repo, pipeline, $index)" ></i>
 			</h3></li>
 			<li>{{ repo.description }}</li>
 			<li><a href="{{ repo.gitUrl }}" target="_blank">{{ repo.gitUrl }}</a></li>
 		</ul>
 	</li>
 </ul>
-<div>
-</div>
+
 </div>
 </div>
