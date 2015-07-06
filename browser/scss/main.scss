@@ -10,7 +10,31 @@
 		clear: both;
 	}
 }
+html, body {
+  height: 100%;
+}
 
+#wrap {
+  min-height: 100%;
+  height: auto;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+  padding-bottom: 100px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: $darkBlue;
+  line-height: 60px;
+  a {
+  	color: white;
+  	font-family: 'Proxima Nova', sans-serif;
+  	font-size: 1.2em;
+  }
+}
 
 body {
 	padding-top: 50px;
@@ -20,6 +44,7 @@ body {
 	background-color: $backgroundWhite;
 	-webkit-font-smoothing: antialiased;
 }
+
 @import 'directives/main';
 @import 'home/main';
 @import 'about/main';

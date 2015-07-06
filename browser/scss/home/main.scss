@@ -1,5 +1,18 @@
 #home-div {
-	background-color: darken($blue, 10%);
+
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#29a2ae+0,006f7b+100 */
+background: #29a2ae; /* Old browsers */
+background: -moz-linear-gradient(top,  #29a2ae 0%, #006f7b 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#29a2ae), color-stop(100%,#006f7b)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #29a2ae 0%,#006f7b 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', endColorstr='#006f7b',GradientType=0 ); /* IE6-9 */
+/*Background Gradient End */
+
+
+	margin-top: -50px;
 	color: white;
 	height: 100vh;
 	width: 100%;
@@ -11,7 +24,7 @@
 	button {
 		margin-top: 5%;
 		font-size: 2em;
-		background: transparent;
+		background: transparent; 
 		font-weight: lighter;
 		border: none;
 		i {
@@ -24,6 +37,12 @@
 	}
 }
 #home {
+	#logo-img {
+		position: absolute;
+		right: 40%;
+		bottom: -10%;
+
+	}
 	fullstack-logo {
 		padding-top: 30px;
 		width: 150px;
@@ -34,7 +53,12 @@
 		text-align: center;
 	}
 }
-
+h1#title-home {
+	font-family: 'Proxima Nova', 'Helvetica Neue', sans-serif;
+	font-weight: 500;
+	font-size: 6em;
+	// letter-spacing: 2px;
+}
 h2#title-home {
 	color: white;
 	padding-top: 5%;
@@ -71,17 +95,19 @@ h2#title-home {
 }
 
 #title-home {
-	color: darken(white, 7%);
-	// color: white;
+	color: white;
 	padding-top: 0%;
 	font-size: 4.5em;
 	font-weight: 100;
 	font-family:  'Helvetica Neue',sans-serif;
 	letter-spacing: 1px;
 }
+#login-button-home {
+	border: 1px solid $offWhite !important;
+}
 
 #subtitle-home {
-	color: $darkBlue;
+	color: $offWhite;
 	text-align: center;
 	font-size: 2.5em;
 	padding-top: -2%;
