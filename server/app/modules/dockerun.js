@@ -75,7 +75,7 @@ function getRepository(gitUrl, pipelineId, githubToken) {
     request.get(options).pipe(fileStream);
     fileStream.on('finish', function() {
       findDockerDir(username, repo, './downloads').then(function(dir) {
-        resolve(dir);
+        return resolve(dir);
       });
     });
     fileStream.on('error', reject);
@@ -113,7 +113,7 @@ function buildImage(imgName, targetDirectory, gitUrl) {
     .then(function() {
       return findDockerDir(username, repo, targetDirectory);
     }).then(function(dir) {
-      return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build -t ' + imgName + ' .')
+      return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
         .then(function(result) {
           console.log('STDOUT', result.stdout);
           console.log('STDERR', result.stderr);
