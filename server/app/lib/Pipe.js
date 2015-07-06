@@ -21,7 +21,7 @@ class Pipe {
 		console.log("DIRNAME",__dirname)
 		var self = this;
 
-		return exec('sudo docker run --name ' + self.id + ' -v ' + this.targetDirectory + '/data:/data ' + self.imgName)
+		return exec('sudo docker run --name ' + self.id + ' -v ' + this.targetDirectory + '/ahab:/ahab ' + self.imgName)
 		.then(function(result){
 			console.log("STDOUT ", result.stdout);
 			console.log("STDERR ", result.stderr);
