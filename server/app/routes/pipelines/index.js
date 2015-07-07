@@ -48,13 +48,13 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 					// Throw error?
 			})
 			.then(null,function(err){
-				err.message= "There was a problem finding the User";
+				err.customMessage= "There was a problem finding the User";
 				err.status= 911;
 				next(err);
 			})
 	})
 	.then(null,function(err){
-		err.message = "There was a problem deleting the pipeline images";
+		err.customMessage = "There was a problem deleting the pipeline images";
 		err.status = 911;
 		next(err);
 	})
@@ -65,7 +65,7 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 			return user;
 		})
 		.then(null,function(err){
-			err.message = "There was a problem removing the pipeline from the user";
+			err.customMessage = "There was a problem removing the pipeline from the user";
 			err.status= 911;
 			next(err);
 		})
@@ -76,7 +76,7 @@ router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 				})
 		})
 		.then(null, function(err) {
-			err.message = "There was a problem saving the user";
+			err.customMessage = "There was a problem saving the user";
 			err.status = 911;
 			next(err);
 		})
@@ -95,7 +95,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 				res.json(JSON.parse(response))
 			})
 			.catch(function(err){
-				err.message = "There was a problem getting the user";
+				err.customMessage = "There was a problem getting the user";
 				next(err);
 			});
 	} else {
@@ -106,7 +106,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 				res.json(user);
 			})
 			.then(null, function(err){
-				err.message= "There was a problem finding the user";
+				err.customMessage= "There was a problem finding the user";
 				next(err);
 			})
 	}
@@ -161,7 +161,7 @@ router.post('/', ensureAuthenticated, function(req, res,next) {
 				.exec();
 		})
 		.then(null,function(err){
-			err.message = "There was a problem finding the User";
+			err.customMessage = "There was a problem finding the User";
 			next(err);
 		})
 		.then(function(user) {
@@ -176,7 +176,7 @@ router.post('/', ensureAuthenticated, function(req, res,next) {
 			})
 		})
 		.then(null,function(err){
-			err.message = "There was a problem removing a pipe from the pipeline";
+			err.customMessage = "There was a problem removing a pipe from the pipeline";
 			next(err);
 		})
 });
