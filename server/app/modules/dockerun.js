@@ -67,17 +67,18 @@ function getRepository(gitUrl, pipelineId, githubToken) {
   console.log("getRepository: ", username, repo); 
   return new Promise(function(resolve, reject) {
     var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
+    
     var options = {
       url: `https://api.github.com/repos/${username}/${repo}/tarball?access_token=${githubToken}`,
       headers: {
         'User-Agent': 'request'
       }
     };
+    
     request.get(options).pipe(fileStream);
+    
     fileStream.on('finish', function() {
-      findDockerDir(username, repo, './downloads').then(function(dir) {
-        return resolve(dir);
-      });
+        resolve();
     });
     fileStream.on('error', reject);
   });
@@ -140,6 +141,7 @@ function findDockerDir(username, repo, targetDirectory) {
     .then(function(files) {
       let test = new RegExp(username + '-' + repo + '-.');
       let matchedFile = files.filter(file => test.test(file))[0];
+      console.log('files',files, 'test',test,'matchedFile',matchedFile);
       return matchedFile;
     })
     .catch(function(err){
