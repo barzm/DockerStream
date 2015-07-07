@@ -1,5 +1,4 @@
 // this is where we instantiate containers and process user pipelines
-var Docker = require('dockerode-promise');
 var ghdownload = require('github-download');
 var fs = require('fs'); //used to access dockerfile
 var request = require('request');
@@ -11,7 +10,8 @@ var Pipeline = require('../lib/Pipeline').Pipeline;
 var mongoose = require('mongoose');
 var PipelineModel = mongoose.model('Pipeline');
 var env = require('../../env/development');
-
+var path = require('path');
+var chalk =require('chalk');
 
 
 Promise.promisifyAll(fs);
@@ -25,28 +25,25 @@ module.exports = {
 
 function run(pipelineId, cb, githubToken) {
   return PipelineModel.findById(pipelineId)
-    // console.log("FOUND PIPELINE ", p);
-    // var pipeline = new Pipeline(p.pipeline);
-    // pipeline.targetDir = '/containers/' + p._id;
-    // return pipeline;
     .exec().then(function(p) {
       var pipeline = new Pipeline(p.pipeline);
       pipeline.mongoId = p._id;
-      pipeline.targetDir = '/containers/' + p._id;
+      //Dev: Building to /vagrant/containers
+      pipeline.targetDir = path.join(__dirname,'../../../containers/'+p._id);
       return pipeline;
     })
     .then(function(pipeline) {
       return pipeline.buildPipeline();
     })
     .then(null,function(err){
-      err.message = "There was a problem building the pipeline";
+      err.customMessage = "There was a problem building the pipeline";
       return err;
     })
     .then(function(pipeline) {
       return pipeline.runPipeline();
     })
     .then(null, function(err){
-      err.message = "There was a problem running the pipeline";
+      err.customMessage = "There was a problem running the pipeline";
       return err;
     })
     .then(function(path) {
@@ -54,29 +51,30 @@ function run(pipelineId, cb, githubToken) {
       return path
     })
     .then(null, function(err) {
-      err.message = "There was a problem in dockerun run";
+      err.customMessage = "There was a problem in dockerun run";
       err.status = 911;
       return err;
     })
 }
 
 function getRepository(gitUrl, pipelineId, githubToken) {
-  var targetDirectory = './downloads/';
+  // Dev: targetDirectory: /vagrant/downloads/
+  var targetDirectory = path.join(__dirname,'../../../downloads');
   var username = username = gitUrl.split('/')[3];
   var repo = gitUrl.split('/')[4];
-  console.log("getRepository: ", username, repo); 
+  // console.log("getRepository: ", username, repo);
   return new Promise(function(resolve, reject) {
     var fileStream = fs.createWriteStream(`${targetDirectory}/${username}-${repo}.tar.gz`);
-    
+
     var options = {
       url: `https://api.github.com/repos/${username}/${repo}/tarball?access_token=${githubToken}`,
       headers: {
         'User-Agent': 'request'
       }
     };
-    
+
     request.get(options).pipe(fileStream);
-    
+
     fileStream.on('finish', function() {
         resolve();
     });
@@ -86,20 +84,22 @@ function getRepository(gitUrl, pipelineId, githubToken) {
 }
 
 function makeContainerDir(pipelineId) {
-  console.log("IN makeContainerDir");
-  var targetDirectory = './containers/' + pipelineId;
+  var targetDirectory= path.join(__dirname,'../../../containers/'+pipelineId);
+  // console.log(chalk.cyan("makeContainerDir targetDirectory: ", targetDirectory));
+  // var targetDirectory = './containers/' + pipelineId;
   return exec('mkdir ' + targetDirectory)
     .catch(function(err) {
-      err.message = "There was a problem making the container directory";
+      err.customMessage = "There was a problem making the container directory";
       err.status = 911;
       return err;
     })
 }
 
 function deleteContainerDir(pipelineid) {
-  return exec('rm -rf ./containers/' + pipelineId)
+  console.log("DELETE CONTAINERS RUNNING");
+  return exec('rm -rf '+path.join(__dirname,'.../../../containers/') + pipelineId)
     .catch(function(err) {
-      err.message = "There was a problem deleting the container directory";
+      err.customMessage = "There was a problem deleting the container directory";
       err.status = 911;
       return err;
     })
@@ -125,13 +125,12 @@ function buildImage(imgName, targetDirectory, gitUrl) {
           return
         })
         .fail(function(err) {
-          err.message = "There was a problem building the image";
-          console.log("ERR FAIL", err);
+          err.customMessage = "There was a problem building the image";
           return err
         })
 
     }).catch(function(err) {
-      err.message = "There was a problem extracting the tarball";
+      err.customMessage = "There was a problem extracting the tarball";
       return err;
     });
 }
@@ -141,11 +140,10 @@ function findDockerDir(username, repo, targetDirectory) {
     .then(function(files) {
       let test = new RegExp(username + '-' + repo + '-.');
       let matchedFile = files.filter(file => test.test(file))[0];
-      console.log('files',files, 'test',test,'matchedFile',matchedFile);
       return matchedFile;
     })
     .catch(function(err){
-      err.message = "There was a problem reading the directory contents";
+      err.customMessage = "There was a problem reading the directory contents";
       return err;
     })
 }

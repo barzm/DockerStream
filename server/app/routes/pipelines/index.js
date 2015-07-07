@@ -12,7 +12,7 @@ var Promise = require('bluebird');
 Promise.promisifyAll(mongoose);
 var cleanup = require('../../modules/dockercleanup');
 var chalk = require('chalk');
-
+var path = require('path');
 
 var ensureAuthenticated = function(req, res, next) {
 	if (req.isAuthenticated()) {
@@ -113,11 +113,11 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 })
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
-	console.log("FIND BY ID",req.body.id);
+	// console.log("FIND BY ID",req.body.id);
 	Pipeline.findById(req.body.id)
 		.exec()
 		.then(function(pipeline) {
-			console.log("adding pipe to pipeline")
+			// console.log("adding pipe to pipeline")
 			var newPipe = {
 				name: req.body.repo.name,
 				gitUrl: req.body.repo.html_url,
@@ -126,22 +126,16 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				imageId: uuid.v4()
 			};
 			pipeline.pipeline.push(newPipe);
-			console.log('new pipe pushed', pipeline);
+			// console.log('new pipe pushed', pipeline);
 			pipeline.save(function(err, updatedPipeline) {
-				console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
+				// console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
 				run.getRepository(newPipe.gitUrl, updatedPipeline._id, req.user.github.token)
 					.then(function() {
-						console.log('get repo returned: ', newPipe.imageId, newPipe.gitUrl)
-						var targetDir = './downloads';
+						var targetDir = path.join(__dirname,'../../../../downloads');
 						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
 					})
-					.catch(function(err){
-						err.message = "There was a problem building the image";
-						err.status = 911;
-						next(err);
-					})
 					.then(function() {
-						console.log(chalk.blue("sending updated pipeline"));
+						// console.log(chalk.blue("sending updated pipeline"));
 						res.json(updatedPipeline);
 					})
 			})

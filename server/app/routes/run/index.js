@@ -10,7 +10,8 @@ module.exports = router;
 router.get('/',function(req,res,next){
 	run.run(req.query.id,req.query.callback)
 	.then(function(path){
-		var read = fs.createReadStream('../../'+path.slice(1));
+		console.log("THIS IS THE PATH THAT THE BLORP HAS MADE", path);
+		var read = fs.createReadStream(path);
 		if(req.query.callback){
 			request.post({url: req.query.callback,form:{key:'hello'}})
 		}else{
@@ -19,6 +20,6 @@ router.get('/',function(req,res,next){
 	})
 	.then(null,function(err){
 		err.message = "There was a problem running the pipeline";
-		next(err); 
+		next(err);
 	})
 })
