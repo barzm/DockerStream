@@ -2,7 +2,7 @@ app.config(function ($stateProvider) {
     $stateProvider.state('home', {
         url: '/',
         templateUrl: 'js/home/home.html',
-        controller: 'HomeCtrl', 
+        controller: 'HomeCtrl',
         resolve: {
         	user: function (AuthService) {
         		return AuthService.getLoggedInUser();
@@ -17,4 +17,4 @@ app.controller('HomeCtrl', function ($scope, AuthService, user) {
 		AuthService.gitLogin();
 	}
 
-})
+});
