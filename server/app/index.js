@@ -36,5 +36,9 @@ app.get('/*', function (req, res) {
 // Error catching endware.
 app.use(function (err, req, res, next) {
   console.log(err.message, "\n",err.stack.split("\n"));
-    res.status(err.status || 500).send(err.message || 'Internal server error.');
+    if(err.customMessage && err.status !== 911){
+      res.send(err.customMessage);
+    }else{
+      res.status(err.status || 500).send(err.message || 'Internal server error.');
+    }
 });
