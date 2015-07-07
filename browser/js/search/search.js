@@ -18,7 +18,8 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
         bottom: true,
         right: true
     };
-
+    $scope.chosenOption = null;
+    $scope.focused = false;
 
     AuthService.getLoggedInUser().then(function(user) {
         $scope.user = user;

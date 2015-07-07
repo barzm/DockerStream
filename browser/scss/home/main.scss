@@ -1,15 +1,15 @@
 #home-div {
 
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#29a2ae+0,006f7b+100 */
-background: #29a2ae; /* Old browsers */
-background: -moz-linear-gradient(top,  #29a2ae 0%, #006f7b 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#29a2ae), color-stop(100%,#006f7b)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* IE10+ */
-background: linear-gradient(to bottom,  #29a2ae 0%,#006f7b 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', endColorstr='#006f7b',GradientType=0 ); /* IE6-9 */
-/*Background Gradient End */
+	background: #29a2ae; /* Old browsers */
+	background: -moz-linear-gradient(top,  #29a2ae 0%, #006f7b 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#29a2ae), color-stop(100%,#006f7b)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #29a2ae 0%,#006f7b 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', endColorstr='#006f7b',GradientType=0 ); /* IE6-9 */
+	/*Background Gradient End */
 
 
 	margin-top: -50px;
@@ -36,13 +36,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', end
 		}
 	}
 }
-	#logo-img {
-		// position: absolute;
-		// right: 40%;
-		// bottom: -10%;
-		margin-top: 5%;
+#logo-img {
+// position: absolute;
+// right: 40%;
+// bottom: -10%;
+margin-top: 5%;
 
-	}
+}
 #home {
 	fullstack-logo {
 		padding-top: 30px;
@@ -58,7 +58,7 @@ h1#title-home {
 	font-family: 'Proxima Nova', 'Helvetica Neue', sans-serif;
 	font-weight: 500;
 	font-size: 6em;
-	// letter-spacing: 2px;
+// letter-spacing: 2px;
 }
 h2#title-home {
 	color: white;
@@ -91,8 +91,8 @@ h2#title-home {
 	}
 }
 #text-boxes {
-		font-size: 1.3em;
-		text-align: center;
+	font-size: 1.3em;
+	text-align: center;
 }
 
 #title-home {
