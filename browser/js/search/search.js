@@ -25,9 +25,11 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
         $scope.user = user;
         if (!$stateParams.input)
             $scope.getMyRepos();
-        else
-            $scope.input = $stateParams.input;
-        $scope.search();
+        else {
+            $scope.chosenOption = 'search';
+            $scope.input.input = $stateParams.input;
+            $scope.search();
+        }
     });
 
     (function() {
