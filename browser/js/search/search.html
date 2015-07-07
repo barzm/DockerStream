@@ -1,5 +1,5 @@
-	<navbar></navbar>
-<div ng-if='chosenOption'>
+<navbar></navbar>
+<div ng-if='chosenOption && chosenOption !== "pending"' >
 	<div class="container">
 		<div class='container col-md-8 col-md-9 col-md-12'>
 			<div layout='row'>
@@ -43,12 +43,12 @@
 </div>
 </div>
 </div>
-<div ng-if='!chosenOption' class='cntr' id='search-full'>
+<div ng-if='!chosenOption' class='cntr nga-fast nga-stagger nga-fade' id='search-full'>
 	<div class="cntr-innr" >
 		<label for="animated-search" class="animated-search" ng-class="{'active': focused}">
 		<input id='animated-search' ng-focus='focused=true' ng-blur='focused=false||input.length' ng-enter='search(); choose("search")' type='text' ng-model='input.input'></input>
 		</label>
 		<p>Search Github</p>
-		<md-button class='md-primary md-hue-3' ng-click='choose("view")'>View Repositories</md-button>
+		<md-button class='md-primary repo-button' ng-click='choose("view")'>My Repositories  </md-button>
 	</div>
 </div>

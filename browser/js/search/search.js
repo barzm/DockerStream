@@ -8,7 +8,7 @@ app.config(function($stateProvider) {
 
 });
 
-app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User, $stateParams, $mdToast, $animate) {
+app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User, $stateParams, $mdToast, $animate, $timeout) {
     $scope.input = {};
     $scope.results = null;
     $scope.selectedPipeline = null;
@@ -38,8 +38,10 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
     })()
 
     $scope.choose = function (option) {
-        $scope.chosenOption = option;
-        console.log($scope.chosenOption);
+        $scope.chosenOption = 'pending';
+        $timeout(function () {
+            $scope.chosenOption = option
+        }, 250);
     }
     $scope.search = function() {
         if (!$scope.input.input) return;
