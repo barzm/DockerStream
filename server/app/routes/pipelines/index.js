@@ -130,8 +130,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 			pipeline.save(function(err, updatedPipeline) {
 				console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
 				run.getRepository(newPipe.gitUrl, updatedPipeline._id, req.user.github.token)
-					.then(function(downloadPath) {
-						console.log('DOWNLOAD PATH ', downloadPath);
+					.then(function() {
 						console.log('get repo returned: ', newPipe.imageId, newPipe.gitUrl)
 						var targetDir = './downloads';
 						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
