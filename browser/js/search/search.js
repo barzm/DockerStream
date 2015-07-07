@@ -9,7 +9,7 @@ app.config(function($stateProvider) {
 });
 
 app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, User, $stateParams, $mdToast, $animate) {
-    $scope.input = null;
+    $scope.input = {};
     $scope.results = null;
     $scope.selectedPipeline = null;
     $scope.userPipelines = null;
@@ -37,8 +37,13 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
             })
     })()
 
+    $scope.choose = function (option) {
+        $scope.chosenOption = option;
+        console.log($scope.chosenOption);
+    }
     $scope.search = function() {
-        Search.repositories($scope.input)
+        if (!$scope.input.input) return;
+        Search.repositories($scope.input.input)
             .then(function(response) {
                 $scope.results = response;
             })

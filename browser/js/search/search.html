@@ -5,7 +5,7 @@
 			<div layout='row'>
 				<md-input-container id='new-name-input'>
 				<label>Search Github</label>
-				<input ng-enter='search()' ng-model='input'></input>
+				<input ng-enter='search()' ng-model='input.input'></input>
 			</md-input-container>
 			<md-button class='md-primary create-btn' ng-click='createPipeline()'>Search</md-button>
 		</div>
@@ -46,9 +46,9 @@
 <div ng-if='!chosenOption' class='cntr' id='search-full'>
 	<div class="cntr-innr" >
 		<label for="animated-search" class="animated-search" ng-class="{'active': focused}">
-		<input id='animated-search' ng-focus='focused=true' ng-blur='focused=false||input.length' type='text' ng-model='input' />
+		<input id='animated-search' ng-focus='focused=true' ng-blur='focused=false||input.length' ng-enter='search(); choose("search")' type='text' ng-model='input.input'></input>
 		</label>
 		<p>Search Github</p>
-		<p>View Repositories</p>
+		<md-button class='md-primary md-hue-3' ng-click='choose("view")'>View Repositories</md-button>
 	</div>
 </div>
