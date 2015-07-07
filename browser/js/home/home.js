@@ -15,6 +15,5 @@ app.controller('HomeCtrl', function ($scope, AuthService, user) {
 	$scope.user = user;
 	$scope.gitLogin = function () {
 		AuthService.gitLogin();
-	}
-
+	};
 });
