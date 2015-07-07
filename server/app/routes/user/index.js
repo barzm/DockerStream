@@ -23,7 +23,6 @@ router.put('/', function (req, res, next) {
 	var newPipeline;
 	cleanup.deleteImage(req.body.image)
 	.then(function(){
-		throw new Error();
 		for (var pipelineObj in updatedPipeline) {
 			newPipeline = updatedPipeline[pipelineObj]['pipeline'];
 			newPipelines.push(newPipeline);

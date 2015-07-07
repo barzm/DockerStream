@@ -17,6 +17,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.loc = window.location.host;
     $scope.saved = 'untouched';
     $scope.urlState;
+    $scope.pipelineId;
 
     $scope.search = function(input) {
         $state.go('search', {
@@ -25,6 +26,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.getRepoByUrl = function(url, pipelineId) {
+        $scope.pipelineId = pipelineId;
         $scope.urlState = 'pending';
         Pipeline.getByUrl(url)
             .then(function(response) {
@@ -127,14 +129,14 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.showConfirmPipeline = function(ev, pipeline) {
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
-            .title(`Are you sure you want to delete ${pipeline}?`)
+            .title(`Are you sure you want to delete ${pipeline.name}?`)
             .content('')
             .ariaLabel('Warning')
             .ok('DELETE')
             .cancel('CANCEL')
             .targetEvent(ev);
         $mdDialog.show(confirm).then(function() {
-            $scope.deleteRepo(pipeline, ix);
+            $scope.deletePipeline(pipeline);
         });
     };
 
