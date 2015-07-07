@@ -20,10 +20,10 @@ class Pipeline {
         var self = this;
         console.log("\n=========MAKING FOLDER=========\n");
         console.log("TARGET", this.targetDir)
-        return exec('mkdir ../../..' + self.targetDir)
+        return exec('mkdir ' + self.targetDir)
             .then(function () {
                 console.log("MAKING data folder",self.targetDir)
-                return exec('mkdir ../../..' + self.targetDir + '/ahab')
+                return exec('mkdir ' + self.targetDir + '/ahab')
             })
             .catch(function (err) {
                 console.log("ERROR IN make container", err.stack)
