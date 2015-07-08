@@ -1,8 +1,13 @@
 'use strict';
 window.app = angular.module('FullstackGeneratedApp', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'dndLists', 'ngClipboard', 'fsaPreBuilt']);
 
-app.config(function ($urlRouterProvider, $locationProvider, ngClipProvider) {
+app.config(function ($urlRouterProvider, $locationProvider, ngClipProvider, $mdThemingProvider) {
     ngClipProvider.setPath('//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.1.6/ZeroClipboard.swf');
+    var customTheme = $mdThemingProvider.extendPalette('indigo', {
+        '500': '01707C'
+    });
+    $mdThemingProvider.theme('default')
+    .primaryPalette('teal')
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
     $locationProvider.html5Mode(true);
     // If we go to a URL that ui-router doesn't have registered, go to the "/" url.
