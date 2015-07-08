@@ -1,11 +1,20 @@
-a {
+.nav-tabs > li > a {
   color: $darkBlue;
 
   &:hover{
     color: $navbar;
   }
   &:focus{
+    background-color: #FCFCFC;
     border: none;
     outline: none;
   }
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  background-color: #FCFCFC;
+}
+
+.tab-content {
+  margin: 15px;
 }
