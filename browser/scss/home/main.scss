@@ -1,5 +1,4 @@
 #home-div {
-	border: 2px solid red;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#29a2ae+0,006f7b+100 */
 	background: #29a2ae; /* Old browsers */
 	background: -moz-linear-gradient(top,  #29a2ae 0%, #006f7b 100%); /* FF3.6+ */
@@ -11,22 +10,27 @@
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', endColorstr='#006f7b',GradientType=0 ); /* IE6-9 */
 	/*Background Gradient End */
 
-
 	margin-top: -50px;
 	color: white;
-	height: 100vh;
-	clear: both;
+	height: 100%;
+	width: 100%;
 	margin: none;
-	overflow: auto;
 
 	button {
 		width: 100%;
 		margin-top: 5%;
 		margin-bottom: 1%;
-		font-size: 2em;
 		background: transparent; 
 		font-weight: lighter;
 		border: none;
+
+		height: 4em;
+		font-size: 5em;
+		@include breakpoint(md) {
+			height: 2em;
+			font-size: 2em;
+		}
+
 		i {
 			font-size: 1em;
 		}
@@ -38,7 +42,13 @@
 }
 
 #logo-img {
-	margin-top: 40px;
+	margin-top: 5%;
+	margin-bottom: 30px;
+	width: 80%;
+	@include breakpoint(md) {
+		width: 40%;
+		margin-top: 18.5%;
+	}
 }
 
 #home {
@@ -55,27 +65,41 @@
 h1#title-home {
 	font-family: 'Proxima Nova', 'Helvetica Neue', sans-serif;
 	font-weight: 500;
-	font-size: 6em;
+	font-size: 12em;
+	@include breakpoint(md) {
+		font-size: 7em;
+	}
 }
 h2#title-home {
 	color: white;
 	padding-top: 5%;
 	text-align: center;
-	font-size: 5.3em;
+	font-size: 6em;
+	@include breakpoint (md) {
+		font-size: 5.3em;
+	}
 }
 
 
 #home-content-info {
-	// padding: 100px 100px;
-	// clear: both;
+	padding: 100px 100px;
 	img {
-		width: 50%;
-		height: 50%;
+		width: 40%;
 		padding-bottom: 30px;
 	}
-	div > div {
-		margin: 0 auto;
+	p {
+		font-size: 4em;
+		padding: 20px 0px;
+		margin-bottom: 100px;
+		margin-top: 20px;
+		@include breakpoint(md) {
+			font-size: 1.5em;
+			padding: 20px 50px;
+			padding-bottom: 0;
+			margin: 0;
+		}
 	}
+
 }
 
 #text-boxes {
@@ -98,10 +122,13 @@ h2#title-home {
 #subtitle-home {
 	color: $offWhite;
 	text-align: center;
-	font-size: 2.5em;
+	font-size: 3.5em;
 	padding-top: -2%;
 	font-weight: lighter;
 	font-family: 'Helvetica Neue', sans-serif;
+	@include breakpoint (md) {
+		font-size: 2.5em;	
+	}
 }
 
 #img1 {
