@@ -115,6 +115,7 @@ function buildImage(imgName, targetDirectory, gitUrl) {
     .then(function() {
       return findDockerDir(username, repo, targetDirectory);
     }).then(function(dir) {
+      console.log('build imminent.',`targetDirectory ${targetDirectory} and `);
       return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
         .then(function(result) {
           console.log('STDOUT', result.stdout);

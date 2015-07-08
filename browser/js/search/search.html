@@ -17,7 +17,7 @@
 				<h3 class="repo-list-name">
 					<a href='{{ result.html_url }}' target="_blank">{{ result.full_name }}</a>
 					<span id='success-msg' ng-if='result.full_name === selectedPipeline && validRepo === "valid"'>
-						Added successfully <i class='fa fa-check-circle-o'></i>
+						Added successfully, building Docker image <i class='fa fa-check-circle-o'></i>
 					</span>
 					<span id='failure-msg' ng-if='result.full_name === selectedPipeline && validRepo === "invalid"'>
 						No Dockerfile found <i class='fa fa-times'></i>
