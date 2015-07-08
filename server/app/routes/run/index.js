@@ -8,23 +8,31 @@ var fs = require('fs');
 var path = require('path');
 module.exports = router;
 
+
 router.get('/',function(req,res,next){
 	run.run(req.query.id,req.query.callback)
 	.then(function(retPath){
 		console.log("THIS IS THE retPath THAT THE BLORP HAS MADE", retPath);
 		var read = fs.createReadStream(retPath);
+		read.on('error',function(err){
+			res.send(err);
+		})
+		read.on('end',function(){
+			if(req.query.callback){
+				res.status(200).end();
+			}
+			var rmfolder = path.join(retPath,'../../');
+			exec('sudo rm -rf '+rmfolder);
+		})
+
 		if(req.query.callback){
-			// REFACTOR THIS
-			request.post({url: req.query.callback,form:{key:'hello'}})
+			try {
+				read.pipe(request.post(req.query.callback));
+			} catch (e) {
+				res.send(e);
+			}
 		}else{
-			read.on('error',function(err){
-				res.send(err);
-			})
 			read.pipe(res);
-			read.on('end',function(){
-				var rmfolder = path.join(retPath,'../../');
-				exec('sudo rm -rf '+rmfolder);
-			})
 		}
 	})
 	.then(null,function(err){
