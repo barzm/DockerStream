@@ -17,10 +17,13 @@ router.get('/',function(req,res,next){
 			// REFACTOR THIS
 			request.post({url: req.query.callback,form:{key:'hello'}})
 		}else{
+			read.on('error',function(err){
+				res.send(err);
+			})
 			read.pipe(res);
 			read.on('end',function(){
 				var rmfolder = path.join(retPath,'../../');
-				exec('sudo rm -rf '+rmfolder); 
+				exec('sudo rm -rf '+rmfolder);
 			})
 		}
 	})
