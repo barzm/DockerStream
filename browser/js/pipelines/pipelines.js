@@ -9,6 +9,7 @@ app.config(function($stateProvider) {
 });
 
 app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams, $mdDialog) {
+    
     $scope.pipelineName = null;
     $scope.created = false;
     $scope.searchInput = null;
@@ -18,6 +19,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.saved = 'untouched';
     $scope.urlState;
     $scope.pipelineId;
+    $scope.errMessage;
 
     $scope.search = function(input) {
         $state.go('search', {
@@ -42,6 +44,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             })
             .catch(function(err) {
                 $scope.urlState = 'invalid';
+                $scope.errMessage = err.data || 'There was an error building your dockerfile ' 
             })
     };
 

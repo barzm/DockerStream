@@ -37,7 +37,7 @@
 			Added Successfully <i class='fa fa-check-circle-o'></i>
 		</span>
 		<span id='failure-msg' ng-if='urlState === "invalid" && pipelineId === pipeline.pipelineId'>
-			No Dockerfile found <i class='fa fa-times'></i>
+			{{ errMessage }}<i class='fa fa-times'></i>
 		</span>
 		<md-progress-circular id='progress-circle' ng-if='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 	</label>

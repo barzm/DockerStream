@@ -33,6 +33,7 @@ app.factory('Pipeline', function($http) {
 			return files.some(file => file.name === 'Dockerfile')
 		})
 		.then(function(shouldAdd) {
+			console.log('Should build this pipe: ', shouldAdd);
 			if (shouldAdd) {
 				return $http.put('api/pipelines', info)
 				.then(function(response) {
@@ -41,7 +42,7 @@ app.factory('Pipeline', function($http) {
 				})
 				.catch(function(err){
 					console.log('Err',err);
-					return err;
+					throw err;
 				})
 			} else {
 				throw new Error('No Dockerfile found')
