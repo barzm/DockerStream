@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-md-12">
+    <h2>Preparing Repositories</h2>
+    <p>
+      Pipelines are run by spinning up a Docker container for each pipe in the pipeline.
+      Each repository in your pipeline must contain a <a href="https://docs.docker.com/">Dockerfile</a> so we know how to set up the container.
+      To pass data between repositories in your pipeline, data can be written to /ahab, a common folder that will be mounted in each container.  For
+      data to be returned at the end of the pipeline, the final output must be written to /ahab/output.json, a file which will be included in the ahab folder.
+    </p>
+    <p>
+      When you add a pipe to your pipeline, your GitHub repo is downloaded and an image is created so that you can run your pipeline quickly at anytime.
+      Stored pipelines are not automatically updated when you update your GitHub repo, so if you want to run a new version of a pipe, you need to remove it from the
+      pipeline and add it again.
+    </p>
+  </div>
+</div>
