@@ -30,16 +30,18 @@ app.factory('Pipeline', function($http) {
 		return $http.get(`/api/pipelines/validate/?url=${url}`)
 		.then(function(response) {
 			var files = response.data;
-			return files.some(function(file) {
-				return file.name === 'Dockerfile'
-			})
-
+			return files.some(file => file.name === 'Dockerfile')
 		})
 		.then(function(shouldAdd) {
 			if (shouldAdd) {
 				return $http.put('api/pipelines', info)
 				.then(function(response) {
+					console.log(response);
 					return response.data;
+				})
+				.catch(function(err){
+					console.log('Err',err);
+					return err;
 				})
 			} else {
 				throw new Error('No Dockerfile found')
