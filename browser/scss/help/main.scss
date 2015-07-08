@@ -1,0 +1,11 @@
+a {
+  color: $darkBlue;
+
+  &:hover{
+    color: $navbar;
+  }
+  &:focus{
+    border: none;
+    outline: none;
+  }
+}
