@@ -1,11 +1,16 @@
 <navbar></navbar>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-10 col-md-offset-1">
       <h3>Website Help</h3>
+      <tabset>
+        <tab ng-repeat="tab in tabs" heading="{{tab.title}}" active="tab.active" disable="tab.disabled">
+          {{tab.content}}
+        </tab>
+      </tabset>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-11 col-md-offset-1">
       <h3>API Help</h3>
       <p>Please see our <a href="https://github.com/mbarzizza/DockerStream">GitHub docs</a></p>
     </div>
