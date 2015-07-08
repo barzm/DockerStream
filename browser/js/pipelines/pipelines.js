@@ -71,8 +71,8 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             })
     };
 
-    $scope.updatePipelines = function(deleted) {
-        Pipeline.update($scope.models.list, deleted.imageId)
+    $scope.updatePipelines = function() {
+        Pipeline.update($scope.models.list)
             .then(function(response) {
                 $scope.saved = 'saved';
             })
@@ -90,7 +90,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.deleteRepo = function(pipeline, ix) {
         var deleted = $scope.models.list[pipeline.name].pipeline.splice(ix, 1)[0];
         $scope.reorder();
-        $scope.updatePipelines(deleted);
+        $scope.updatePipelines();
     };
 
     $scope.deletePipeline = function(pipeline) {
