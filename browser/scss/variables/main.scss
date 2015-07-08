@@ -6,6 +6,7 @@ $offWhite: #c2dfe3;
 $background: #29A2AE;
 $grey: #D6D6D6;
 $navbar: #01707C;
+$backgroundGrey: #f5f5f5;
 
  @mixin breakpoint($point) {
    @if $point == lg {

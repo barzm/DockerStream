@@ -1,3 +1,7 @@
+#background-grey {
+	background-color: $backgroundGrey;
+}
+
 div {
 	h2 .md-raised {
 		float: right;
@@ -63,7 +67,7 @@ div {
 		background: $backgroundWhite;
 		border-radius: 3px;
 	}
-	
+
 }
 .fa-times {
 	float: right;
@@ -76,12 +80,13 @@ div {
 		color: $blue;
 	}
 	list-style-type: none;
+	background-color:$backgroundGrey;
 
 }
 
 #repo-box {
+	background-color: $backgroundGrey;
 	cursor: pointer;
-
 	&:active {
 		cursor: grabbing;
 	}
@@ -112,10 +117,14 @@ div {
 
 }
 #pipeline-repo {
+	background-color: $backgroundWhite;
 	border: 1px solid black;
 	border-radius: 4px;
 	padding-bottom: 1%;
 	margin-bottom: 1%;
+	-webkit-box-shadow: 0px 0px 4px 0px rgba(179,179,179,1);
+-moz-box-shadow: 0px 0px 4px 0px rgba(179,179,179,1);
+box-shadow: 0px 0px 4px 0px rgba(179,179,179,1);
 	ul {
 	}
 	li {
@@ -131,6 +140,7 @@ div {
 
 #user-pipeline,
 #user-pipeline > li {
+
 	position: relative;
 }
 
@@ -152,7 +162,6 @@ div {
 
 
 #user-pipeline li {
-	background-color: $backgroundWhite;
 	display: block;
 	padding: 10px 15px;
 	margin-bottom: -1px;
