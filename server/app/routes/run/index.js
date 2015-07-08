@@ -16,6 +16,7 @@ router.get('/',function(req,res,next){
 		var read = fs.createReadStream(retPath);
 		read.on('error',function(err){
 			res.send(err);
+			exec('sudo rm -rf '+ rmfolder);
 		})
 		read.on('end',function(){
 			if(req.query.callback){
