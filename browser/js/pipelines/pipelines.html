@@ -42,7 +42,7 @@
 		</span>
 		<md-progress-circular id='progress-circle' ng-if='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
 	</label>
-	<input type='url' name='url' ng-enter='searchUrl && getRepoByUrl(searchUrl, pipeline.pipelineId)' ng-model='searchUrl'></input>
+	<input type='url' name='url' ng-enter='getRepoByUrl(searchUrl.url, pipeline.pipelineId)' ng-model='searchUrl.url'></input>
 </md-input-container>
 </section>
 <ul id='user-pipeline'  dnd-list='pipeline.pipeline'>
