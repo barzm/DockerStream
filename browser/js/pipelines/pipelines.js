@@ -21,6 +21,13 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.pipelineId;
     $scope.errMessage;
 
+    $scope.$on('deleteRepo',function(event,data){
+        console.log('Heard delete repo!',data);
+        $scope.deleteRepo(data[0],data[1],data[2]);
+    });
+
+
+
     $scope.search = function(input) {
         $state.go('search', {
             input: input
@@ -101,6 +108,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.deleteRepo = function(pipeline, ix, repo) {
+        debugger
         var deleted = $scope.models.list[pipeline.name].pipeline.splice(ix, 1)[0];
         $scope.reorder();
         $scope.updatePipelines(repo);
@@ -125,20 +133,20 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         return obj;
     };
 
-    $scope.showConfirm = function(ev, repo, pipeline, ix) {
-        console.log('repo', repo)
-        var confirm = $mdDialog.confirm()
-            .parent(angular.element(document.body))
-            .title(`Are you sure you want to delete ${repo.name}?`)
-            .content('This repository will be deleted, along with its associated Docker image.')
-            .ariaLabel('Warning')
-            .ok('DELETE')
-            .cancel('CANCEL')
-            .targetEvent(ev);
-        $mdDialog.show(confirm).then(function() {
-            $scope.deleteRepo(pipeline, ix, repo);
-        });
-    };
+    // $scope.showConfirm = function(ev, repo, pipeline, ix) {
+    //     console.log('repo', repo)
+    //     var confirm = $mdDialog.confirm()
+    //         .parent(angular.element(document.body))
+    //         .title(`Are you sure you want to delete ${repo.name}?`)
+    //         .content('This repository will be deleted, along with its associated Docker image.')
+    //         .ariaLabel('Warning')
+    //         .ok('DELETE')
+    //         .cancel('CANCEL')
+    //         .targetEvent(ev);
+    //     $mdDialog.show(confirm).then(function() {
+    //         $scope.deleteRepo(pipeline, ix, repo);
+    //     });
+    // };
 
     $scope.showConfirmPipeline = function(ev, pipeline) {
         var confirm = $mdDialog.confirm()
