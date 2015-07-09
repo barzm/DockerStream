@@ -25,61 +25,61 @@ var ensureAuthenticated = function(req, res, next) {
 router.get('/validate', ensureAuthenticated, function(req, res, next) {
 	console.log(req.query);
 	request({
-			url: req.query.url,
-			headers: {
-				'User-Agent': 'Pied Pipeline',
-				'Authorization': 'token ' + req.user.github.token
-			}
-		})
-		.then(function(response) {
-			res.json(JSON.parse(response))
-		})
-		.catch(next);
+		url: req.query.url,
+		headers: {
+			'User-Agent': 'Pied Pipeline',
+			'Authorization': 'token ' + req.user.github.token
+		}
+	})
+	.then(function(response) {
+		res.json(JSON.parse(response))
+	})
+	.catch(next);
 })
 
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 	cleanup.deletePipelineImages(req.params.id)
-	.then(function(){
+	.then(function() {
 		return Pipeline.findByIdAndRemove(req.params.id)
+		.exec()
+		.then(function() {
+			return User.findById(req.user._id)
 			.exec()
-			.then(function() {
-				return User.findById(req.user._id)
-					.exec()
-					// Throw error?
-			})
-			.then(null,function(err){
-				err.customMessage= "There was a problem finding the User";
-				err.status= 911;
-				next(err);
-			})
+						// Throw error?
+					})
+		.then(null, function(err) {
+			err.customMessage = "There was a problem finding the User";
+			err.status = 911;
+			next(err);
+		})
 	})
-	.then(null,function(err){
+	.then(null, function(err) {
 		err.customMessage = "There was a problem deleting the pipeline images";
 		err.status = 911;
 		next(err);
 	})
+	.then(function(user) {
+		user.pipelines = user.pipelines.filter(function(id) {
+			return id.toString() !== req.params.id;
+		})
+		return user;
+	})
+	.then(null, function(err) {
+		err.customMessage = "There was a problem removing the pipeline from the user";
+		err.status = 911;
+		next(err);
+	})
+	.then(function(user) {
+		return user.saveAsync()
 		.then(function(user) {
-			user.pipelines = user.pipelines.filter(function(id) {
-				return id.toString() !== req.params.id;
-			})
-			return user;
+			res.json(user);
 		})
-		.then(null,function(err){
-			err.customMessage = "There was a problem removing the pipeline from the user";
-			err.status= 911;
-			next(err);
-		})
-		.then(function(user) {
-			return user.saveAsync()
-				.then(function(user) {
-					res.json(user);
-				})
-		})
-		.then(null, function(err) {
-			err.customMessage = "There was a problem saving the user";
-			err.status = 911;
-			next(err);
-		})
+	})
+	.then(null, function(err) {
+		err.customMessage = "There was a problem saving the user";
+		err.status = 911;
+		next(err);
+	})
 })
 
 router.get('/', ensureAuthenticated, function(req, res, next) {
@@ -91,93 +91,93 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 					'Authorization': 'token ' + req.user.github.token
 				}
 			})
-			.then(function(response) {
-				res.json(JSON.parse(response))
-			})
-			.catch(function(err){
-				err.customMessage = "There was a problem getting the user";
-				next(err);
-			});
+		.then(function(response) {
+			res.json(JSON.parse(response))
+		})
+		.catch(function(err) {
+			err.customMessage = "There was a problem getting the user";
+			next(err);
+		});
 	} else {
 		User.findById(req.user._id)
-			.populate('pipelines')
-			.exec()
-			.then(function(user) {
-				res.json(user);
-			})
-			.then(null, function(err){
-				err.customMessage= "There was a problem finding the user";
-				next(err);
-			})
+		.populate('pipelines')
+		.exec()
+		.then(function(user) {
+			res.json(user);
+		})
+		.then(null, function(err) {
+			err.customMessage = "There was a problem finding the user";
+			next(err);
+		})
 	}
 })
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
 	res.sendStatus(200);
 	Pipeline.findById(req.body.id)
-		.exec()
-		.then(function(pipeline) {
-			var newPipe = {
-				name: req.body.repo.name,
-				gitUrl: req.body.repo.html_url,
-				description: req.body.repo.description,
-				order: pipeline.pipeline.length,
-				imageId: uuid.v4()
-			};
-			pipeline.pipeline.push(newPipe);
+	.exec()
+	.then(function(pipeline) {
+		var newPipe = {
+			name: req.body.repo.name,
+			gitUrl: req.body.repo.html_url,
+			description: req.body.repo.description,
+			order: pipeline.pipeline.length,
+			imageId: uuid.v4()
+		};
+		pipeline.pipeline.push(newPipe);
 			// console.log('new pipe pushed', pipeline);
 			pipeline.save(function(err, updatedPipeline) {
 				// console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
 				run.getRepository(newPipe.gitUrl, updatedPipeline._id, req.user.github.token)
-					.then(function() {
-						console.log('Here is your image iddd!!!!!', newPipe.imageId);
-						console.log(chalk.blue("Ran get repository, about to build image! :)"));
-						var targetDir = path.join(__dirname,'../../../../downloads');
-						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
-					})
-					.then(function() {
-						console.log(chalk.blue("sending updated pipeline"));
-						res.json(updatedPipeline);
-					})
+				.then(function() {
+					console.log('Here is your image iddd!!!!!', newPipe.imageId);
+					console.log(chalk.blue("Ran get repository, about to build image! :)"));
+					var targetDir = path.join(__dirname, '../../../../downloads');
+					return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
+				})
+				.then(function() {
+					console.log(chalk.blue("sending updated pipeline"));
+					res.json(updatedPipeline);
+				})
 			})
 		})
-	.then(null,function(err){
-			next(err);
-		})
+	.then(null, function(err) {
+		next(err);
+	})
 })
 
 
-router.post('/', ensureAuthenticated, function(req, res,next) {
+router.post('/', ensureAuthenticated, function(req, res, next) {
 	var pipelineId;
 	Pipeline.create({
-			user: req.user._id,
-			name: req.body.name
-		})
-		.then(function(pipeline) {
-			pipelineId = pipeline._id;
-			return pipeline
-		})
-		.then(function() {
+		user: req.user._id,
+		name: req.body.name
+	})
+	.then(function(pipeline) {
+		pipelineId = pipeline._id;
+		return pipeline
+	})
+	.then(function() {
+		return User.findById(req.user._id)
+		.exec();
+	})
+	.then(null, function(err) {
+		err.customMessage = "There was a problem finding the User";
+		next(err);
+	})
+	.then(function(user) {
+		user.pipelines.unshift(pipelineId);
+		user.save(function(err, savedUser) {
 			return User.findById(req.user._id)
-				.exec();
-		})
-		.then(null,function(err){
-			err.customMessage = "There was a problem finding the User";
-			next(err);
-		})
-		.then(function(user) {
-			user.pipelines.unshift(pipelineId);
-			user.save(function(err, savedUser) {
-				return User.findById(req.user._id)
-					.populate('pipelines')
-					.exec()
-					.then(function(user) {
-						res.json(user);
-					})
+			.populate('pipelines')
+			.exec()
+			.then(function(user) {
+				res.json(user);
 			})
 		})
-		.then(null,function(err){
-			err.customMessage = "There was a problem removing a pipe from the pipeline";
-			next(err);
-		})
+	})
+	.then(null, function(err) {
+		err.customMessage = "There was a problem removing a pipe from the pipeline";
+		next(err);
+	})
 });
