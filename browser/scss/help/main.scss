@@ -5,16 +5,20 @@
     color: $navbar;
   }
   &:focus{
-    background-color: #FCFCFC;
+    background-color: #F5F5F5;
     border: none;
     outline: none;
   }
 }
 
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-  background-color: #FCFCFC;
+  background-color: #F5F5F5;
 }
 
 .tab-content {
   margin: 15px;
+}
+
+img.help {
+  border: solid 4px $grey;
 }
