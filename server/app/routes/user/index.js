@@ -15,13 +15,15 @@ router.get('/', function (req, res, next) {
 	.then(null, next)
 })
 router.put('/', function (req, res, next) {
+	console.log('req.body')
+	console.log(req.body)
 	var updatedPipeline = req.body.pipelines;
 	var pipelines = [];
 	var newPipelines = [];
 	var counter = 0;
 	var len = Object.keys(updatedPipeline).length
 	var newPipeline;
-	cleanup.deleteImage(req.body.image)
+	cleanup.deleteImage(req.body.image.imageId)
 	.then(function(){
 		for (var pipelineObj in updatedPipeline) {
 			newPipeline = updatedPipeline[pipelineObj]['pipeline'];
