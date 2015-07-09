@@ -129,6 +129,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				// console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
 				run.getRepository(newPipe.gitUrl, updatedPipeline._id, req.user.github.token)
 					.then(function() {
+						console.log('Here is your image iddd!!!!!', newPipe.imageId);
 						console.log(chalk.blue("Ran get repository, about to build image! :)"));
 						var targetDir = path.join(__dirname,'../../../../downloads');
 						return run.buildImage(newPipe.imageId, targetDir, newPipe.gitUrl);
