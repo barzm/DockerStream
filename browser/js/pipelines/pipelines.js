@@ -34,6 +34,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         $scope.urlState = 'pending';
         Pipeline.getByUrl(url)
             .then(function(response) {
+                $scope.repo.icon = 'wrench';
                 return Pipeline.add({
                     id: pipelineId,
                     repo: response

@@ -34,13 +34,13 @@
 	<md-input-container id='new-name-input'>
 	<label>
 		Add by URL
-		<span id='success-msg' ng-if='urlState === "valid" && pipelineId === pipeline.pipelineId'>
-			Added Successfully <i class='fa fa-check-circle-o'></i>
-		</span>
+		<!-- <span id='success-msg' ng-if='urlState === "valid" && pipelineId === pipeline.pipelineId'>
+			Pipeline Building <i class='fa fa-check-circle-o'></i>
+		</span> -->
 		<span id='failure-msg' ng-if='urlState === "invalid" && pipelineId === pipeline.pipelineId'>
 			{{ errMessage }}<i class='fa fa-times'></i>
 		</span>
-		<md-progress-circular id='progress-circle' ng-if='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular>
+		<!-- <md-progress-circular id='progress-circle' ng-if ='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular> -->
 	</label>
 	<input type='url' name='url' ng-enter='getRepoByUrl(searchUrl.url, pipeline.pipelineId)' ng-model='searchUrl.url'></input>
 </md-input-container>
@@ -52,6 +52,7 @@
 			</h3></li>
 			<li>{{ repo.description }}</li>
 			<li><a href="{{ repo.gitUrl }}" target="_blank">{{ repo.gitUrl }}</a></li>
+			<li><i class="fa fa-{{repo.icon}}"></i></li>
 		</ul>
 	</li>
 </ul>
