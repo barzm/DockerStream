@@ -137,7 +137,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				})
 				.then(function() {
 					console.log(chalk.blue("sending updated pipeline"));
-					res.json(updatedPipeline);
+					pipeline.findByIdAndUpdate(req.body.id,{built: true});
 				})
 			})
 		})
