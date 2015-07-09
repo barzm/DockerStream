@@ -13,7 +13,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     $scope.pipelineName = null;
     $scope.created = false;
     $scope.searchInput = null;
-    $scope.searchUrl;
+    $scope.searchUrl = {};
     $scope.models = {};
     $scope.loc = window.location.host;
     $scope.saved = 'untouched';
@@ -28,6 +28,8 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.getRepoByUrl = function(url, pipelineId) {
+        if (!url) return;
+        $scope.searchUrl.url = null;
         $scope.pipelineId = pipelineId;
         $scope.urlState = 'pending';
         Pipeline.getByUrl(url)
@@ -38,7 +40,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
                 })
             })
             .then(function(response) {
-                $scope.searchUrl = '';
+                $scope.searchUrl.url = '';
                 $scope.urlState = 'valid';
                 return $scope.getPipelines();
             })

@@ -35,6 +35,7 @@ app.factory('Pipeline', function($http) {
 		.then(function(shouldAdd) {
 			console.log('Should build this pipe: ', shouldAdd);
 			if (shouldAdd) {
+				console.log('ABOUT TO PUTT');
 				return $http.put('api/pipelines', info)
 				.then(function(response) {
 					console.log(response);
