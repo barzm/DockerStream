@@ -37,6 +37,16 @@ router.get('/validate', ensureAuthenticated, function(req, res, next) {
 	.catch(next);
 })
 
+router.get('/pipeStatus/:pipelineId/:imgId',function(req,res,next){
+	//REFACTOR
+	Pipeline.findById(req.params.pipelineId)
+	.exec()
+	.then(function(pipeline){
+		var built = false;
+		res.send(_.result(_.find(pipeline.pipeline,'imageId',req.params.imgId),'built');
+	})
+})
+
 router.delete('/:id', ensureAuthenticated, function(req, res, next) {
 	cleanup.deletePipelineImages(req.params.id)
 	.then(function() {
@@ -137,7 +147,7 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				})
 				.then(function() {
 					console.log(chalk.blue("sending updated pipeline"));
-					pipeline.findById(req.body.id)
+					Pipeline.findById(req.body.id)
 					.exec()
 					.then(function(pipeline){
 						pipeline.pipeline.forEach(function(pipe){

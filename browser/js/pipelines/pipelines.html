@@ -35,7 +35,7 @@
 	<label>
 		Add by URL
 		<span id='success-msg' ng-if='urlState === "valid" && pipelineId === pipeline.pipelineId'>
-			Added Successfully <i class='fa fa-check-circle-o'></i>
+			Pipeline Building <i class='fa fa-check-circle-o'></i>
 		</span>
 		<span id='failure-msg' ng-if='urlState === "invalid" && pipelineId === pipeline.pipelineId'>
 			{{ errMessage }}<i class='fa fa-times'></i>
