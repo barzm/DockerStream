@@ -28,7 +28,7 @@ class Pipe {
 			return result;
 		})
 		.catch(function(err) {
-			console.error(err.message, err.stack.split('\n'));
+			console.error("ERROR IN RUN EXEC",err.message, err.stack.split('\n'));
 		});
 
 	}
