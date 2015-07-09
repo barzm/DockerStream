@@ -26,13 +26,16 @@ module.exports = {
 function run(pipelineId, cb, githubToken) {
   return PipelineModel.findById(pipelineId)
     .exec().then(function(p) {
+      console.log("P",p);
       var pipeline = new Pipeline(p.pipeline);
       pipeline.mongoId = p._id;
       //Dev: Building to /vagrant/containers
       pipeline.targetDir = path.join(__dirname,'../../../containers/'+p._id);
+      console.log("NEW PIPELINE",pipeline);
       return pipeline;
     })
     .then(function(pipeline) {
+      console.log("ABOUT TO BUILD PIPELINE",pipeline);
       return pipeline.buildPipeline();
     })
     .then(null,function(err){
@@ -40,6 +43,7 @@ function run(pipelineId, cb, githubToken) {
       return err;
     })
     .then(function(pipeline) {
+      console.log("ABOUT TO RUN PIPELINE!!!!",pipeline);
       return pipeline.runPipeline();
     })
     .then(null, function(err){

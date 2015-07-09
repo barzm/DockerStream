@@ -4,7 +4,7 @@ var uuid = require('node-uuid');
 var tar = require('tarball-extract');
 var Promise = require('bluebird');
 var exec = require('child-process-promise').exec;
-var chalk = require('chalk'); 
+var chalk = require('chalk');
 
 
 fs = Promise.promisifyAll(fs);
@@ -40,7 +40,7 @@ class Pipe {
 			return result;
 		})
 		.catch(function(err) {
-			return err
+			console.error("ERROR IN RUN EXEC",err.message, err.stack.split('\n'));
 			console.error(err.message, err.stack.split('\n'));
 		});
 
