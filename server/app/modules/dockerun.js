@@ -114,8 +114,18 @@ function buildImage(imgName, targetDirectory, gitUrl) {
     .then(function() {
       return findDockerDir(username, repo, targetDirectory);
     }).then(function(dir) {
-      console.log('blorgynorpy.', 'imgNAMEEEEE',imgName);
+      console.log('build imminent.',`targetDirectory ${targetDirectory} and `);
       return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
+      .progress(function(cp){
+        console.log(`${imgName} building: `);
+        cp.stdout.on('data',function(data){
+          console.log('BUILD IMAGE STDOUT ', data.toString());
+        })
+        cp.stderr.on('data',function(data){
+          console.log(chalk.red('BUILD IMAGE ERR ',data.toString()));
+        })
+
+      })
         .then(function(result) {
           console.log('STDOUT', result.stdout);
           console.log('STDERR', result.stderr);
