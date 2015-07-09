@@ -106,7 +106,6 @@ function deleteContainerDir(pipelineid) {
 }
 
 function buildImage(imgName, targetDirectory, gitUrl) {
-
   var username = gitUrl.split('/')[3];
   var repo = gitUrl.split('/')[4];
   var extractPromised = Promise.promisify(tar.extractTarball);
@@ -115,7 +114,7 @@ function buildImage(imgName, targetDirectory, gitUrl) {
     .then(function() {
       return findDockerDir(username, repo, targetDirectory);
     }).then(function(dir) {
-      console.log('build imminent.',`targetDirectory ${targetDirectory} and `);
+      console.log('blorgynorpy.', 'imgNAMEEEEE',imgName);
       return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
         .then(function(result) {
           console.log('STDOUT', result.stdout);
