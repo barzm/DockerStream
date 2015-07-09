@@ -14,7 +14,8 @@ var schema = new mongoose.Schema({
 		description: String,
 		order: Number,
 		_id: false,
-		imageId: {type:String, required:true, default:uuid.v4}
+		imageId: {type:String, required:true, default:uuid.v4},
+		built: {type: Boolean, default: false}
 	}],
 	runs: [{
 		type: Date,
