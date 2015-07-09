@@ -39,6 +39,7 @@ app.factory('Pipeline', function($http) {
 				return $http.put('api/pipelines', info)
 				.then(function(response) {
 					console.log(response);
+					poll(response.data.pipelineId,response.data.imgId);
 					return response.data;
 				})
 				.catch(function(err){
@@ -50,6 +51,24 @@ app.factory('Pipeline', function($http) {
 			}
 
 		})
+	}
+
+	function poll (pipelineId,imgId) {
+		console.log('start poll',imgId);
+		var built = false;
+		var checkBuild = setInterval(function(){
+			$http.get('/api/pipelines/pipeStatus/'+pipelineId + '/' + imgId)
+			.then(function(response){
+				console.log("Polling: ", pipelineId, imgId, response.data);
+				if(response.data){
+					clear();
+				}
+			})
+		},10000);
+
+		function clear(){
+			clearInterval(checkBuild);
+		}
 	}
 	
 	function updatePipelines (pipelines, image) {
