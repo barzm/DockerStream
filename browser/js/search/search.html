@@ -12,6 +12,9 @@
 	</div>
 
 	<div id='search-results'>
+		<div id="error" ng-if="results.length===0">
+			<h2>Sorry, No repositories were found.</h2>
+		</div>
 		<ul id='repo-list' ng-repeat='result in results'>
 			<li id='repo-item'>
 				<h3 class="repo-list-name">

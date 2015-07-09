@@ -49,6 +49,7 @@ app.controller('SearchCtrl', function($scope, Search, Pipeline, AuthService, Use
         if (!$scope.input.input) return;
         Search.repositories($scope.input.input)
             .then(function(response) {
+                
                 $scope.results = response;
             })
     }
