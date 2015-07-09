@@ -137,7 +137,15 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				})
 				.then(function() {
 					console.log(chalk.blue("sending updated pipeline"));
-					pipeline.findByIdAndUpdate(req.body.id,{built: true});
+					pipeline.findById(req.body.id)
+					.exec()
+					.then(function(pipeline){
+						pipeline.pipeline.forEach(function(pipe){
+							if(pipe.imageId===newPipe.imageId)
+								pipe.built=true;
+						})
+						pipeline.save();
+					})
 				})
 			})
 		})
