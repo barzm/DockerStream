@@ -77,11 +77,18 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             })
     };
 
-    $scope.updatePipelines = function() {
-        Pipeline.update($scope.models.list)
-            .then(function(response) {
-                $scope.saved = 'saved';
-            })
+    $scope.updatePipelines = function(repo) {
+        if (repo) {
+            Pipeline.update($scope.models.list, repo)
+                .then(function(response) {
+                    $scope.saved = 'saved';
+                })
+        } else {
+            Pipeline.update($scope.models.list)
+                .then(function(response) {
+                    $scope.saved = 'saved';
+                }) 
+        }
     };
 
     $scope.reorder = function() {
@@ -93,10 +100,10 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         $scope.saved = 'unsaved';
     };
 
-    $scope.deleteRepo = function(pipeline, ix) {
+    $scope.deleteRepo = function(pipeline, ix, repo) {
         var deleted = $scope.models.list[pipeline.name].pipeline.splice(ix, 1)[0];
         $scope.reorder();
-        $scope.updatePipelines();
+        $scope.updatePipelines(repo);
     };
 
     $scope.deletePipeline = function(pipeline) {
@@ -119,6 +126,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.showConfirm = function(ev, repo, pipeline, ix) {
+        console.log('repo', repo)
         var confirm = $mdDialog.confirm()
             .parent(angular.element(document.body))
             .title(`Are you sure you want to delete ${repo.name}?`)
@@ -128,7 +136,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
             .cancel('CANCEL')
             .targetEvent(ev);
         $mdDialog.show(confirm).then(function() {
-            $scope.deleteRepo(pipeline, ix);
+            $scope.deleteRepo(pipeline, ix, repo);
         });
     };
 
