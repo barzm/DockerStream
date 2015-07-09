@@ -113,6 +113,7 @@ router.get('/', ensureAuthenticated, function(req, res, next) {
 })
 
 router.put('/', ensureAuthenticated, function(req, res, next) {
+	res.sendStatus(200);
 	Pipeline.findById(req.body.id)
 		.exec()
 		.then(function(pipeline) {
