@@ -10,6 +10,9 @@
   margin-bottom: 0px;
   border: none;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+  .navbar-header {
+    line-height: 10px;
+  }
   fullstack-logo {
     padding-top: 10px;
     margin-right: 20px;
@@ -66,11 +69,17 @@
 
   .welcome {
     float: right;
-    margin-top: 15px;
+    padding: 1.7rem 15px;
     span {
+      color: darken(white, 10%);
     }
     a {
       cursor: pointer;
+      padding-left: 20px;
+      &:hover {
+        color: $darkBlue;
+        text-decoration: none;
+      }
     }
   }
   .nav-container {
