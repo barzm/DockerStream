@@ -117,9 +117,24 @@ function buildImage(imgName, targetDirectory, gitUrl) {
   return extractPromised(`${targetDirectory}/${username}-${repo}.tar.gz`, targetDirectory)
     .then(function() {
       return findDockerDir(username, repo, targetDirectory);
-    }).then(function(dir) {
+    })
+    .then(function(dir) {
       console.log('build imminent.',`targetDirectory ${targetDirectory} and `);
       return exec('cd ' + targetDirectory + '/' + dir + '; sudo docker build  --no-cache -t ' + imgName + ' .')
+      .then(function(result) {
+        console.log('STDOUT', result.stdout);
+        console.log('STDERR', result.stderr);
+        if (!result.stderr) {
+          exec('rm -rf ' + targetDirectory + '/' + dir)
+        }
+        return
+      })
+      .fail(function(err) {
+        console.log("FAILING EXEC",err);
+        exec('rm -rf ' + targetDirectory + '/' + dir);
+        err.customMessage = "There was a problem building the image";
+        throw err;
+      })
       .progress(function(cp){
         console.log(`${imgName} building: `);
         cp.stdout.on('data',function(data){
@@ -128,25 +143,12 @@ function buildImage(imgName, targetDirectory, gitUrl) {
         cp.stderr.on('data',function(data){
           console.log(chalk.red('BUILD IMAGE ERR ',data.toString()));
         })
-
       })
-        .then(function(result) {
-          console.log('STDOUT', result.stdout);
-          console.log('STDERR', result.stderr);
-          if (!result.stderr) {
-            return exec('rm -rf ' + targetDirectory + '/' + dir)
-          }
-          return
-        })
-        .fail(function(err) {
-          err.customMessage = "There was a problem building the image";
-          return err
-        })
-
-    }).catch(function(err) {
-      err.customMessage = "There was a problem extracting the tarball";
-      return err;
-    });
+    })
+    // .catch(function(err) {
+    //   err.customMessage = "There was a problem extracting the tarball";
+    //   throw err;
+    // });
 }
 
 function findDockerDir(username, repo, targetDirectory) {

@@ -136,8 +136,10 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 		};
 		res.send({pipelineId: req.body.id,imgId: newPipe.imageId});
 		pipeline.pipeline.push(newPipe);
-			// console.log('new pipe pushed', pipeline);
+		// console.log('new pipe pushed', pipeline);
+		return new Promise(function(resolve, reject){
 			pipeline.save(function(err, updatedPipeline) {
+				if (err) reject(err);
 				// console.log("NEW PIPE IN PUT ROUTE: \n", newPipe, "\n")
 				run.getRepository(newPipe.gitUrl, updatedPipeline._id, req.user.github.token)
 				.then(function() {
@@ -148,21 +150,23 @@ router.put('/', ensureAuthenticated, function(req, res, next) {
 				})
 				.then(function() {
 					console.log(chalk.blue("sending updated pipeline"));
-					Pipeline.findById(req.body.id)
-					.exec()
-					.then(function(pipeline){
-						pipeline.pipeline.forEach(function(pipe){
-							if(pipe.imageId===newPipe.imageId)
-								pipe.built=true;
-						})
-						pipeline.save();
-					})
+					return Pipeline.findById(req.body.id).exec();
 				})
-			})
-		})
-	.then(null, function(err) {
-		next(err);
+				.then(function(pipeline){
+					pipeline.pipeline.forEach(function(pipe){
+						if(pipe.imageId===newPipe.imageId)
+							pipe.built=true;
+					})
+					pipeline.save(function(err, result){
+						if (err) reject (err);
+						else resolve(result);
+					});
+				})
+				.catch(reject);
+			});
+		});
 	})
+	.then(null, next);
 })
 
 
