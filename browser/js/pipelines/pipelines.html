@@ -47,13 +47,7 @@
 </section>
 <ul id='user-pipeline'  dnd-list='pipeline.pipeline'>
 	<li id='repo-box' ng-repeat="repo in pipeline.pipeline" dnd-draggable='repo' dnd-moved='pipeline.pipeline.splice($index, 1); reorder()' dnd-effect-allowed='move' dnd-selected='models.selected = repo' ng-class="{'selected': models.selected === repo}">
-		<ul id='pipeline-repo'>
-			<li><h3>{{ repo.name }}<i class='fa fa-times' ng-click="showConfirm($event, repo, pipeline, $index)" ></i>
-			</h3></li>
-			<li>{{ repo.description }}</li>
-			<li><a href="{{ repo.gitUrl }}" target="_blank">{{ repo.gitUrl }}</a></li>
-			<li><i class="fa fa-{{repo.icon}}"></i></li>
-		</ul>
+		<pipe pipe='repo' pipeline='pipeline' index='$index'></pipe>
 	</li>
 </ul>
 

@@ -1,0 +1,19 @@
+	<ul id='pipeline-repo'>
+		<div class="row">
+			<div class="col-md-10" >
+				<li><h3>{{ pipe.name }}
+					<i class="fa fa-{{icon}}" tooltip="{{status}}"></i>
+				</h3></li>
+
+				<li>{{ pipe.description }}</li>
+				<li><a href="{{ pipe.gitUrl }}" target="_blank">{{ pipe.gitUrl }}</a></li>
+			</div>
+			
+			<div class="col-md-1 col-md-offset-1 pull-right" class="pipeIcon">
+				<div class="row">
+					<li><i class='fa fa-times fa-2x'  ng-click="showConfirm($event, pipe, pipeline, index)" ></i></li>
+				</div>
+			</div>
+		</div>
+
+	</ul>
