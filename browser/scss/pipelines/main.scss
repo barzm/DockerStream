@@ -70,10 +70,13 @@ div {
 
 }
 .fa-times {
-	float: right;
-	margin-right: 2%;
 	color: #BA554C;
 	cursor: pointer;
+	padding-right:2%; 
+	text-align:right;
+}
+.fa-check {
+	color: #3FC380;
 }
 #user-pipeline {
 	h2 {
@@ -173,3 +176,6 @@ li.selected {
 	cursor: grabbing;
 }
 
+#pipeIcons{
+	
+}

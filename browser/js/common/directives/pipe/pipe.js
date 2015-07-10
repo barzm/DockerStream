@@ -1,4 +1,4 @@
-app.directive('pipe',function($mdDialog){
+app.directive('pipe',function($mdDialog,Pipeline){
 	return {
 		restrict: 'E',
 		scope: {
@@ -9,10 +9,42 @@ app.directive('pipe',function($mdDialog){
 		templateUrl: '/js/common/directives/pipe/pipe.html',
 		link: function(scope,elem,attr){
 
-			console.log("ISOLATE REPO")
+			scope.checkFirst = setTimeout(function(){
+				Pipeline.poll(scope.pipeline.pipelineId,scope.pipe.imageId)
+				.then(function (response){
+					console.log("FIRST POLL",scope.pipeline.pipelineId);
+					if(response.data){
+						scope.icon = 'check',
+						scope.status = 'Ready'
+					}else{
+						scope.icon='wrench',
+						scope.status='Building...'
+					}
+				})
+			},0);
+
+				scope.checkBuild = setInterval(function(){
+					console.log("CHECK BUILD");
+					Pipeline.poll(scope.pipeline.pipelineId,scope.pipe.imageId)
+					.then(function(response){
+						if(response.data){
+							scope.icon = 'check';
+							scope.status = 'Ready';
+							scope.clearPoll();
+						}else{
+							scope.icon='wrench',
+							scope.status='Building...'
+						}
+					})
+				},10000);
+
+			scope.clearPoll = function(){
+				console.log('CLEAR CHECK BUILD');
+				clearInterval(scope.checkBuild);
+			}
 
 			scope.deleteRepo = function(pipeline, ix, repo) {
-				debugger;
+				clearInterval(scope.checkBuild);
 				scope.$emit('deleteRepo',[pipeline,ix,repo]);	
 			};
 

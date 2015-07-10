@@ -41,7 +41,6 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         $scope.urlState = 'pending';
         Pipeline.getByUrl(url)
             .then(function(response) {
-                $scope.repo.icon = 'wrench';
                 return Pipeline.add({
                     id: pipelineId,
                     repo: response
@@ -108,7 +107,7 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
     };
 
     $scope.deleteRepo = function(pipeline, ix, repo) {
-        debugger
+        console.log('deleting',pipeline,repo);
         var deleted = $scope.models.list[pipeline.name].pipeline.splice(ix, 1)[0];
         $scope.reorder();
         $scope.updatePipelines(repo);
@@ -132,21 +131,6 @@ app.controller('PipelinesCtrl', function($scope, Pipeline, $state, $stateParams,
         })
         return obj;
     };
-
-    // $scope.showConfirm = function(ev, repo, pipeline, ix) {
-    //     console.log('repo', repo)
-    //     var confirm = $mdDialog.confirm()
-    //         .parent(angular.element(document.body))
-    //         .title(`Are you sure you want to delete ${repo.name}?`)
-    //         .content('This repository will be deleted, along with its associated Docker image.')
-    //         .ariaLabel('Warning')
-    //         .ok('DELETE')
-    //         .cancel('CANCEL')
-    //         .targetEvent(ev);
-    //     $mdDialog.show(confirm).then(function() {
-    //         $scope.deleteRepo(pipeline, ix, repo);
-    //     });
-    // };
 
     $scope.showConfirmPipeline = function(ev, pipeline) {
         var confirm = $mdDialog.confirm()

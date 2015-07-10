@@ -43,6 +43,7 @@ router.get('/pipeStatus/:pipelineId/:imgId',function(req,res,next){
 	.exec()
 	.then(function(pipeline){
 		var built = false;
+		
 		res.send(_.result(_.find(pipeline.pipeline,'imageId',req.params.imgId),'built'));
 	})
 })
