@@ -14,7 +14,7 @@
         <button ng-show="!user" id='login-button' class="btn btn-primary" ng-click="gitLogin()">
 Login with <i class="fa fa-github github-login"></i></button>
         <div ng-show="user" class="welcome">
-            <span>Hello {{ user.github.displayName.split(' ')[0] }}</span>
+            <span>Hello, {{ user.github.displayName.split(' ')[0] }}</span>
             <a ng-click="logout()">Logout</a>
         </div>
     </div>
