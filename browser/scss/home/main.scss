@@ -9,21 +9,34 @@
 	background: linear-gradient(to bottom,  #29a2ae 0%,#006f7b 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#29a2ae', endColorstr='#006f7b',GradientType=0 ); /* IE6-9 */
 	/*Background Gradient End */
-
+	h4 {
+		padding-bottom: 80%;
+		font-weight: lighter;
+		font-size: 1.5em;
+		a {
+			color: white;
+			&:hover {
+				text-decoration: none;
+				color: $blue;
+			}
+		}
+		font-family: 'Proxima Nova', 'Helvetica Neue', 'Open Sans', sans-serif;
+	}
 	margin-top: -50px;
 	color: white;
 	height: 100%;
 	width: 100%;
 	margin: none;
-	fullstack-logo {
-		padding: 0;
-		margin-right: 10px;
-
+	fullstack-logo{
+		// padding-top:12%;
+		padding-top: 20%;
+		padding-bottom: 5%; 
+		width:80%; 
 	}
 	button {
 		width: 100%;
 		margin-top: 5%;
-		margin-bottom: 1%;
+		margin-bottom:15%;
 		background: transparent; 
 		font-weight: lighter;
 		border: none;
@@ -56,11 +69,6 @@
 }
 
 #home {
-	fullstack-logo {
-		padding-top: 30px;
-		width: 150px;
-		margin: 0 auto;
-	}
 	h1 {
 		margin-top: 40px;
 		text-align: center;
@@ -76,12 +84,13 @@ h1#title-home {
 }
 h2#title-home {
 	color: white;
-	padding-top: 5%;
+	// padding-top: 5%;
+	padding-bottom: 5%;
 	text-align: center;
 	font-size: 6em;
-	@include breakpoint (md) {
-		font-size: 5.3em;
-	}
+	// @include breakpoint (md) {
+	// 	font-size: 4em;
+	// }
 }
 
 
