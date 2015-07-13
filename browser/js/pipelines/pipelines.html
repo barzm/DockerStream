@@ -1,9 +1,9 @@
 <div id='background-grey'>
-<navbar></navbar>
-<div class="container">
-	<div class='container col-md-8 col-md-9 col-md-12'>
+	<navbar></navbar>
+	<div class="container">
+
 		<div layout='row'>
-			<md-input-container id='new-name-input'>
+			<md-input-container class='col-md-8 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12'>
 			<label>Create New Pipeline</label>
 			<input ng-enter='createPipeline()'ng-model='pipelineName'></input>
 		</md-input-container>
@@ -12,9 +12,11 @@
 	</div>
 </div>
 
-<div class='pipeline-body' ng-repeat="pipeline in models.list">
+<div class='pipeline-body col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12' ng-repeat="pipeline in models.list">
 	<h2 id='pipeline-name'>
 		{{ pipeline.name }}
+	</h2>
+	<h2>
 		<span class="clipboard-container">
 			<input type="text" onClick='this.select()' value='http://{{loc}}/api/run?id={{pipeline.pipelineId}}' readonly='readonly'>
 			<span class="input-group-button">
@@ -34,13 +36,9 @@
 	<md-input-container id='new-name-input'>
 	<label>
 		Add by URL
-		<!-- <span id='success-msg' ng-if='urlState === "valid" && pipelineId === pipeline.pipelineId'>
-			Pipeline Building <i class='fa fa-check-circle-o'></i>
-		</span> -->
 		<span id='failure-msg' ng-if='urlState === "invalid" && pipelineId === pipeline.pipelineId'>
 			{{ errMessage }}<i class='fa fa-times'></i>
 		</span>
-		<!-- <md-progress-circular id='progress-circle' ng-if ='urlState === "pending" && pipelineId === pipeline.pipelineId' class="md-hue-2" md-mode="indeterminate"></md-progress-circular> -->
 	</label>
 	<input type='url' name='url' ng-enter='getRepoByUrl(searchUrl.url, pipeline.pipelineId)' ng-model='searchUrl.url'></input>
 </md-input-container>

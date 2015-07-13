@@ -12,7 +12,7 @@
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
+        <li class='item{{$index}}' ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
           <a ui-sref-active="active" ui-sref="{{ item.state }}">{{ item.label }}</a>
         </li>
         <li class="dropdown">

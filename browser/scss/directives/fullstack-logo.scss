@@ -12,3 +12,16 @@ fullstack-logo {
 		width: 200%;
 	}
 }
+
+.icon-bar {
+	background-color: white;
+}
+
+.navbar-toggle {
+	&:hover {
+		background-color: #165157;
+	}	
+	&:active {
+		background-color: #165157;
+	}
+}
