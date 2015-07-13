@@ -23,8 +23,9 @@ router.put('/', function (req, res, next) {
 	var counter = 0;
 	var len = Object.keys(updatedPipeline).length
 	var newPipeline;
-	cleanup.deleteImage(req.body.image.imageId)
-	.then(function(){
+	//NOT WORKING - no image id
+	// cleanup.deleteImage(req.body.image.imageId)
+	// .then(function(){
 		for (var pipelineObj in updatedPipeline) {
 			newPipeline = updatedPipeline[pipelineObj]['pipeline'];
 			newPipelines.push(newPipeline);
@@ -43,10 +44,10 @@ router.put('/', function (req, res, next) {
 				next(err);
 			})
 		}
-	})
-	.catch(function(err){
-		err.message ="There was a problem deleting a pipe from your pipeline: " + req.body.image;
-		err.status = 911;
-		next(err);
-	})
+	// })
+	// .catch(function(err){
+	// 	err.message ="There was a problem deleting a pipe from your pipeline: " + req.body.image;
+	// 	err.status = 911;
+	// 	next(err);
+	// })
 })
