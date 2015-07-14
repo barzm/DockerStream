@@ -1,6 +1,6 @@
 #home-div {
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#29a2ae+0,006f7b+100 */
-	background: #29a2ae; /* Old browsers */
+	background: #29a2ae; 
 	background: -moz-linear-gradient(top,  #29a2ae 0%, #006f7b 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#29a2ae), color-stop(100%,#006f7b)); /* Chrome,Safari4+ */
 	background: -webkit-linear-gradient(top,  #29a2ae 0%,#006f7b 100%); /* Chrome10+,Safari5.1+ */
@@ -28,7 +28,6 @@
 	width: 100%;
 	margin: none;
 	fullstack-logo{
-		// padding-top:12%;
 		padding-top: 20%;
 		padding-bottom: 5%; 
 		width:80%; 
@@ -36,7 +35,7 @@
 	button {
 		width: 100%;
 		margin-top: 5%;
-		margin-bottom:15%;
+		margin-bottom: 20%;
 		background: transparent; 
 		font-weight: lighter;
 		border: none;
@@ -84,13 +83,9 @@ h1#title-home {
 }
 h2#title-home {
 	color: white;
-	// padding-top: 5%;
 	padding-bottom: 5%;
 	text-align: center;
-	font-size: 6em;
-	// @include breakpoint (md) {
-	// 	font-size: 4em;
-	// }
+	font-size: 5.5em;
 }
 
 
