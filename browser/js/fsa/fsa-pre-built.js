@@ -91,7 +91,7 @@
         };
 
         this.gitLogin = function () {
-            window.location.href = "http://127.0.0.1:8080/auth/github"
+            window.location.href = "http://ahabdata.com/auth/github"
         }
 
         this.logout = function () {
